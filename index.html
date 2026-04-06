@@ -130,24 +130,24 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
 <div id="sidebar">
   <div class="sb-top">
     <div class="sb-brand">
-      <div class="sb-brand-icon">&#x1F4F0;</div>
+      <div class="sb-brand-icon">📰</div>
       <div><div class="sb-brand-name">TeamBlog</div><div class="sb-brand-sub">协作博客平台</div></div>
     </div>
   </div>
   <nav class="sb-nav">
     <div class="sb-sec">栏目</div>
-    <div class="sb-item active" onclick="filterCat('')" id="cat-all"><span class="ico">&#x1F3E0;</span>全部帖子<span class="sb-count" id="cnt-all">0</span></div>
-    <div class="sb-item" onclick="filterCat('announce')" id="cat-announce"><span class="ico">&#x1F4E2;</span>公告<span class="sb-count" id="cnt-announce">0</span></div>
-    <div class="sb-item" onclick="filterCat('tech')" id="cat-tech"><span class="ico">&#x1F4BB;</span>技术<span class="sb-count" id="cnt-tech">0</span></div>
-    <div class="sb-item" onclick="filterCat('life')" id="cat-life"><span class="ico">&#x1F331;</span>生活<span class="sb-count" id="cnt-life">0</span></div>
-    <div class="sb-item" onclick="filterCat('share')" id="cat-share"><span class="ico">&#x1F517;</span>分享<span class="sb-count" id="cnt-share">0</span></div>
-    <div class="sb-item" onclick="filterCat('discuss')" id="cat-discuss"><span class="ico">&#x1F4AC;</span>讨论<span class="sb-count" id="cnt-discuss">0</span></div>
-    <div class="sb-item" onclick="filterCat('other')" id="cat-other"><span class="ico">&#x1F4CC;</span>其他<span class="sb-count" id="cnt-other">0</span></div>
+    <div class="sb-item active" onclick="filterCat('')" id="cat-all"><span class="ico">🏠</span>全部帖子<span class="sb-count" id="cnt-all">0</span></div>
+    <div class="sb-item" onclick="filterCat('announce')" id="cat-announce"><span class="ico">📢</span>公告<span class="sb-count" id="cnt-announce">0</span></div>
+    <div class="sb-item" onclick="filterCat('tech')" id="cat-tech"><span class="ico">💻</span>技术<span class="sb-count" id="cnt-tech">0</span></div>
+    <div class="sb-item" onclick="filterCat('life')" id="cat-life"><span class="ico">🌱</span>生活<span class="sb-count" id="cnt-life">0</span></div>
+    <div class="sb-item" onclick="filterCat('share')" id="cat-share"><span class="ico">🔗</span>分享<span class="sb-count" id="cnt-share">0</span></div>
+    <div class="sb-item" onclick="filterCat('discuss')" id="cat-discuss"><span class="ico">💬</span>讨论<span class="sb-count" id="cnt-discuss">0</span></div>
+    <div class="sb-item" onclick="filterCat('other')" id="cat-other"><span class="ico">📌</span>其他<span class="sb-count" id="cnt-other">0</span></div>
     <div class="sb-sec" style="margin-top:8px">操作</div>
-    <div class="sb-item" onclick="openWrite()"><span class="ico">&#x270F;&#xFE0F;</span>写新帖子</div>
-    <div class="sb-item" onclick="loadPosts(true)"><span class="ico">&#x1F504;</span>刷新内容</div>
-    <div class="sb-item" onclick="openSetup()"><span class="ico">&#x2699;&#xFE0F;</span>GitHub 设置</div>
-    <div class="sb-item" onclick="openHowTo()"><span class="ico">&#x2753;</span>使用帮助</div>
+    <div class="sb-item" onclick="openWrite()"><span class="ico">✏️</span>写新帖子</div>
+    <div class="sb-item" onclick="loadPosts(true)"><span class="ico">🔄</span>刷新内容</div>
+    <div class="sb-item" onclick="openSetup()"><span class="ico">⚙️</span>GitHub 设置</div>
+    <div class="sb-item" onclick="openHowTo()"><span class="ico">❓</span>使用帮助</div>
   </nav>
   <div class="sb-footer">
     <div class="gh-pill">
@@ -159,18 +159,18 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
 
 <div id="main">
   <div id="topbar">
-    <button id="toggle-sb" onclick="toggleSidebar()">&#9776;</button>
+    <button id="toggle-sb" onclick="toggleSidebar()">☰</button>
     <div class="tb-title" id="tb-title">TeamBlog 协作博客</div>
     <div class="tb-right">
-      <button class="btn btn-outline btn-sm" onclick="loadPosts(true)">&#x1F504; 刷新</button>
-      <button class="btn btn-green btn-sm" onclick="openWrite()">&#x270F;&#xFE0F; 写帖子</button>
-      <button class="btn btn-outline btn-sm" onclick="openSetup()">&#x2699;&#xFE0F; 设置</button>
+      <button class="btn btn-outline btn-sm" onclick="loadPosts(true)">🔄 刷新</button>
+      <button class="btn btn-green btn-sm" onclick="openWrite()">✏️ 写帖子</button>
+      <button class="btn btn-outline btn-sm" onclick="openSetup()">⚙️ 设置</button>
     </div>
   </div>
 
   <div id="content">
     <div id="setup-banner">
-      <div class="setup-title">&#x1F517; 连接 GitHub 仓库</div>
+      <div class="setup-title">🔗 连接 GitHub 仓库</div>
       <div class="setup-desc">帖子存储在 <code>posts/</code> 目录，每篇独立 JSON 文件，GitHub Pages 自动发布。</div>
       <div class="setup-grid">
         <div class="sf"><label>GitHub 用户名</label><input id="cfg-owner" placeholder="your-username"/></div>
@@ -180,17 +180,17 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
         <div class="sf" style="grid-column:1/-1"><label>Personal Access Token</label><input id="cfg-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"/></div>
       </div>
       <div class="setup-actions">
-        <button class="btn btn-green btn-sm" onclick="connectGH()">&#x1F50C; 连接并加载帖子</button>
-        <button class="btn btn-sm" style="background:transparent;border:1px solid #334155;color:#94a3b8" onclick="loadSavedCfg()">&#x21A9; 读取已保存配置</button>
-        <button class="btn btn-sm" style="background:transparent;border:1px solid #334155;color:#94a3b8" onclick="openHowTo()">&#x2753; 帮助</button>
+        <button class="btn btn-green btn-sm" onclick="connectGH()">🔌 连接并加载帖子</button>
+        <button class="btn btn-sm" style="background:transparent;border:1px solid #334155;color:#94a3b8" onclick="loadSavedCfg()">↩ 读取已保存配置</button>
+        <button class="btn btn-sm" style="background:transparent;border:1px solid #334155;color:#94a3b8" onclick="openHowTo()">❓ 帮助</button>
       </div>
     </div>
 
     <div id="view-list">
       <div class="view-header">
-        <h2 id="view-title">&#x1F3E0; 全部帖子</h2>
+        <h2 id="view-title">🏠 全部帖子</h2>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <input class="search-input" id="search-input" placeholder="&#x1F50D; 搜索帖子..." oninput="renderList()" style="width:180px"/>
+          <input class="search-input" id="search-input" placeholder="🔍 搜索帖子..." oninput="renderList()" style="width:180px"/>
           <select class="search-input" id="sort-select" onchange="renderList()" style="width:auto">
             <option value="newest">最新优先</option>
             <option value="oldest">最旧优先</option>
@@ -200,14 +200,14 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
       </div>
       <div class="posts-grid" id="posts-grid">
         <div class="empty-state" style="grid-column:1/-1">
-          <div class="es-icon">&#x1F4F0;</div>
+          <div class="es-icon">📰</div>
           <p>请先连接 GitHub 仓库<br/>或点击「写帖子」发布第一篇内容</p>
         </div>
       </div>
     </div>
 
     <div id="view-post">
-      <div class="post-back" onclick="showList()">&#x2190; 返回列表</div>
+      <div class="post-back" onclick="showList()">← 返回列表</div>
       <div id="post-detail-content"></div>
     </div>
   </div>
@@ -217,20 +217,20 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
 <div class="overlay hidden" id="write-modal">
   <div class="modal modal-lg">
     <div class="modal-hd">
-      <h3 id="write-modal-title">&#x270F;&#xFE0F; 写新帖子</h3>
-      <button class="mc" onclick="closeModal('write-modal')">&#x2715;</button>
+      <h3 id="write-modal-title">✏️ 写新帖子</h3>
+      <button class="mc" onclick="closeModal('write-modal')">✕</button>
     </div>
     <div class="modal-bd">
       <div class="fg-row">
         <div class="fg"><label>帖子标题 *</label><input id="w-title" placeholder="输入标题..."/></div>
         <div class="fg"><label>栏目分类 *</label>
           <select id="w-cat">
-            <option value="announce">&#x1F4E2; 公告</option>
-            <option value="tech">&#x1F4BB; 技术</option>
-            <option value="life">&#x1F331; 生活</option>
-            <option value="share">&#x1F517; 分享</option>
-            <option value="discuss">&#x1F4AC; 讨论</option>
-            <option value="other">&#x1F4CC; 其他</option>
+            <option value="announce">📢 公告</option>
+            <option value="tech">💻 技术</option>
+            <option value="life">🌱 生活</option>
+            <option value="share">🔗 分享</option>
+            <option value="discuss">💬 讨论</option>
+            <option value="other">📌 其他</option>
           </select>
         </div>
       </div>
@@ -262,8 +262,8 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
     </div>
     <div class="modal-ft">
       <button class="btn btn-outline" onclick="closeModal('write-modal')">取消</button>
-      <button class="btn btn-outline btn-sm" onclick="previewPost()">&#x1F441; 预览</button>
-      <button class="btn btn-green" onclick="publishPost()">&#x1F680; 发布到 GitHub</button>
+      <button class="btn btn-outline btn-sm" onclick="previewPost()">👁 预览</button>
+      <button class="btn btn-green" onclick="publishPost()">🚀 发布到 GitHub</button>
     </div>
   </div>
 </div>
@@ -271,7 +271,7 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
 <!-- Setup Modal -->
 <div class="overlay hidden" id="setup-modal">
   <div class="modal" style="max-width:520px">
-    <div class="modal-hd"><h3>&#x2699;&#xFE0F; GitHub 设置</h3><button class="mc" onclick="closeModal('setup-modal')">&#x2715;</button></div>
+    <div class="modal-hd"><h3>⚙️ GitHub 设置</h3><button class="mc" onclick="closeModal('setup-modal')">✕</button></div>
     <div class="modal-bd">
       <div class="fg"><label>GitHub 用户名</label><input id="sm-owner"/></div>
       <div class="fg"><label>仓库名称</label><input id="sm-repo"/></div>
@@ -281,7 +281,7 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
     </div>
     <div class="modal-ft">
       <button class="btn btn-outline" onclick="closeModal('setup-modal')">取消</button>
-      <button class="btn btn-green" onclick="saveSetupModal()">&#x1F4BE; 保存并重新连接</button>
+      <button class="btn btn-green" onclick="saveSetupModal()">💾 保存并重新连接</button>
     </div>
   </div>
 </div>
@@ -289,7 +289,7 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
 <!-- HowTo Modal -->
 <div class="overlay hidden" id="howto-modal">
   <div class="modal" style="max-width:560px">
-    <div class="modal-hd"><h3>&#x1F4D6; 使用帮助</h3><button class="mc" onclick="closeModal('howto-modal')">&#x2715;</button></div>
+    <div class="modal-hd"><h3>📖 使用帮助</h3><button class="mc" onclick="closeModal('howto-modal')">✕</button></div>
     <div class="modal-bd">
       <p style="font-size:13px;color:var(--muted);margin-bottom:16px">TeamBlog 将帖子存储在 GitHub 仓库的 <code>posts/</code> 目录，通过 GitHub Pages 免费发布。</p>
       <div class="howto-step"><div class="howto-num">1</div><div class="howto-text">创建 <strong>Public</strong> 仓库，开启 <strong>GitHub Pages</strong>（Settings → Pages → Deploy from branch → main）</div></div>
@@ -308,11 +308,11 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
 <!-- Preview Modal -->
 <div class="overlay hidden" id="preview-modal">
   <div class="modal modal-lg">
-    <div class="modal-hd"><h3>&#x1F441; 帖子预览</h3><button class="mc" onclick="closeModal('preview-modal')">&#x2715;</button></div>
+    <div class="modal-hd"><h3>👁 帖子预览</h3><button class="mc" onclick="closeModal('preview-modal')">✕</button></div>
     <div class="modal-bd" id="preview-content"></div>
     <div class="modal-ft">
       <button class="btn btn-outline" onclick="closeModal('preview-modal')">关闭</button>
-      <button class="btn btn-green" onclick="closeModal('preview-modal');publishPost()">&#x1F680; 确认发布</button>
+      <button class="btn btn-green" onclick="closeModal('preview-modal');publishPost()">🚀 确认发布</button>
     </div>
   </div>
 </div>
@@ -349,23 +349,35 @@ function closeModal(id){document.getElementById(id).classList.add('hidden');}
 function openHowTo(){document.getElementById('howto-modal').classList.remove('hidden');}
 
 function ghH(){return{'Authorization':'token '+cfg.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'};}
-
 function ghGet(p){
   return fetch(GH+p,{headers:ghH()}).then(function(r){
     return r.json().then(function(d){if(!r.ok)throw new Error(d.message||r.status);return d;});
   });
 }
-
 function ghPut(p,b){
   return fetch(GH+p,{method:'PUT',headers:ghH(),body:JSON.stringify(b)}).then(function(r){
     return r.json().then(function(d){if(!r.ok)throw new Error(d.message||r.status);return d;});
   });
 }
-
 function ghDel(p,b){
   return fetch(GH+p,{method:'DELETE',headers:ghH(),body:JSON.stringify(b)}).then(function(r){
     return r.json().then(function(d){if(!r.ok)throw new Error(d.message||r.status);return d;});
   });
+}
+
+// 安全的 base64 解码（支持中文）
+function b64decode(str){
+  try{
+    return decodeURIComponent(escape(atob(str.replace(/\n/g,''))));
+  }catch(e){
+    // 兼容旧版直接 atob 存储的内容
+    try{return atob(str.replace(/\n/g,''));}catch(e2){return '';}
+  }
+}
+
+// 安全的 base64 编码（支持中文）
+function b64encode(str){
+  return btoa(unescape(encodeURIComponent(str)));
 }
 
 function loadSavedCfg(){
@@ -416,11 +428,11 @@ function loadPosts(showMsg){
       rs.forEach(function(r,i){
         if(r.status==='fulfilled'){
           try{
-            var content=r.value.content.replace(/\n/g,'');
-            var d=JSON.parse(atob(content));
+            // ✅ 修复：使用 b64decode 正确解码中文内容
+            var d=JSON.parse(b64decode(r.value.content));
             d._sha=r.value.sha;d._fn=tl[i].name;
             allPosts.push(d);
-          }catch(e){}
+          }catch(e){console.warn('解析帖子失败:',tl[i].name,e);}
         }
       });
       allPosts.sort(function(a,b){return new Date(b.date)-new Date(a.date);});
@@ -458,10 +470,8 @@ function publishPost(){
   showLoad('正在发布到 GitHub...');
   var b64;
   try{
-    var jsonStr=JSON.stringify(obj,null,2);
-    var encoded=encodeURIComponent(jsonStr);
-    var unescaped=unescape(encoded);
-    b64=btoa(unescaped);
+    // ✅ 使用 b64encode 正确编码中文内容
+    b64=b64encode(JSON.stringify(obj,null,2));
   }catch(e){hideLoad();toast('内容编码失败','err');return;}
   var body={message:'post: '+title+' by '+author,content:b64,branch:cfg.branch};
   if(editingPostId){
@@ -505,7 +515,7 @@ function renderList(){
   if(sort==='oldest')posts=posts.slice().sort(function(a,b){return new Date(a.date)-new Date(b.date);});
   else if(sort==='author')posts=posts.slice().sort(function(a,b){return(a.author||'').localeCompare(b.author||'');});
   var ci=currentCat?CAT[currentCat]:null;
-  document.getElementById('view-title').innerHTML=(ci?ci.icon+' '+ci.label:'🏠 全部帖子');
+  document.getElementById('view-title').textContent=(ci?ci.icon+' '+ci.label:'🏠 全部帖子');
   var grid=document.getElementById('posts-grid');
   if(!posts.length){
     grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">'+(ci?ci.icon:'📰')+'</div><p>'+(q?'没有找到匹配的帖子':'暂无帖子，点击「写帖子」发布第一篇！')+'</p></div>';
@@ -669,6 +679,7 @@ function saveSetupModal(){
   connectGH();
 }
 
+// Auto-load on start
 (function(){
   try{
     var s=JSON.parse(localStorage.getItem('tb_cfg')||'{}');
