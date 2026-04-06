@@ -1,0 +1,69 @@
+{
+  "title": "Google Cloud Vision Example",
+  "author": "曹雷",
+  "content": "# Google Cloud Vision Example\n\nFirst make sure you set up your google account with a [Cloud Vision Project](https://cloud.google.com/vision/docs/getting-started##set_up_your_project).  Then you need to enter billing details (to verify you are human) and set up credentials.  This will download a `.json` file.\n\nBefore you work in this notebook, you have to do this to let python know about your [application default credentials](https://cloud.google.com/vision/docs/getting-started#adc).  So put the `.json` file in this folder (but do not commit it into git!).  Then `export GOOGLE_APPLICATION_CREDENTIALS=<path to your json file>`.\n\nThis code is based on [Google's face detection tutorial](https://cloud.google.com/vision/docs/face-tutorial).\n\n## Requirements\n```\ngoogle-api-python-client==1.5.0\nPillow==3.1.1\n```\n\n\n```python\nfrom googleapiclient import discovery\nimport httplib2\nfrom oauth2client.client import GoogleCredentials\nimport base64\nfrom PIL import Image\nfrom PIL import ImageDraw\n```\n\n\n\n```python\n# Set up a connection to the Google service\nDISCOVERY_URL='https://{api}.googleapis.com/$discovery/rest?version={apiVersion}'\ncredentials = GoogleCredentials.get_application_default()\nservice = discovery.build('vision', 'v1', credentials=credentials, discoveryServiceUrl=DISCOVERY_URL)\n```\n\n\n\n```python\n# load the input images\ninput_filename = \"dalai-lama.jpg\"\nimage = open(input_filename,'rb')\nimage_content = image.read()\nfrom IPython.display import Image\nImage(input_filename)\n```\n\n> 输出：\n> ```\n> <IPython.core.display.Image object>\n> ```\n\n\n\n```python\n# fire off request for face detection from Google\nbatch_request = [{\n    'image': {\n        'content': base64.b64encode(image_content)\n        },\n    'features': [{\n        'type': 'FACE_DETECTION',\n        'maxResults': 4,\n        }]\n    }]\nrequest = service.images().annotate(body={\n    'requests': batch_request,\n    })\nresponse = request.execute()\nprint('Found %s face%s' % (len(response['responses']), '' if len(response['responses']) == 1 else 's'))\n```\n\n> 输出：\n> ```\n> Found 1 face\n> \n> ```\n\n\n\n```python\n#print response\n# print out emotions for each one\nfor result in response['responses']:\n    for annotation in result['faceAnnotations']:\n        for emotion in ['joy','sorrow','surprise','anger']:\n            print \"%s: %s\" % (emotion, annotation[emotion+'Likelihood'])\n        \n```\n\n> 输出：\n> ```\n> joy: VERY_LIKELY\n> sorrow: VERY_UNLIKELY\n> surprise: VERY_UNLIKELY\n> anger: VERY_UNLIKELY\n> \n> ```\n\n\n\n```python\n\n```",
+  "category": "tech",
+  "date": "2026-04-06T14:13:15.218Z",
+  "emoji": "📓",
+  "cover": "",
+  "tags": [
+    ""
+  ],
+  "nbCells": [
+    {
+      "type": "markdown",
+      "src": "# Google Cloud Vision Example\n\nFirst make sure you set up your google account with a [Cloud Vision Project](https://cloud.google.com/vision/docs/getting-started##set_up_your_project).  Then you need to enter billing details (to verify you are human) and set up credentials.  This will download a `.json` file.\n\nBefore you work in this notebook, you have to do this to let python know about your [application default credentials](https://cloud.google.com/vision/docs/getting-started#adc).  So put the `.json` file in this folder (but do not commit it into git!).  Then `export GOOGLE_APPLICATION_CREDENTIALS=<path to your json file>`.\n\nThis code is based on [Google's face detection tutorial](https://cloud.google.com/vision/docs/face-tutorial).\n\n## Requirements\n```\ngoogle-api-python-client==1.5.0\nPillow==3.1.1\n```"
+    },
+    {
+      "type": "code",
+      "src": "from googleapiclient import discovery\nimport httplib2\nfrom oauth2client.client import GoogleCredentials\nimport base64\nfrom PIL import Image\nfrom PIL import ImageDraw",
+      "ec": 1,
+      "outputs": []
+    },
+    {
+      "type": "code",
+      "src": "# Set up a connection to the Google service\nDISCOVERY_URL='https://{api}.googleapis.com/$discovery/rest?version={apiVersion}'\ncredentials = GoogleCredentials.get_application_default()\nservice = discovery.build('vision', 'v1', credentials=credentials, discoveryServiceUrl=DISCOVERY_URL)",
+      "ec": 2,
+      "outputs": []
+    },
+    {
+      "type": "code",
+      "src": "# load the input images\ninput_filename = \"dalai-lama.jpg\"\nimage = open(input_filename,'rb')\nimage_content = image.read()\nfrom IPython.display import Image\nImage(input_filename)",
+      "ec": 3,
+      "outputs": [
+        {
+          "kind": "text",
+          "data": "<IPython.core.display.Image object>"
+        }
+      ]
+    },
+    {
+      "type": "code",
+      "src": "# fire off request for face detection from Google\nbatch_request = [{\n    'image': {\n        'content': base64.b64encode(image_content)\n        },\n    'features': [{\n        'type': 'FACE_DETECTION',\n        'maxResults': 4,\n        }]\n    }]\nrequest = service.images().annotate(body={\n    'requests': batch_request,\n    })\nresponse = request.execute()\nprint('Found %s face%s' % (len(response['responses']), '' if len(response['responses']) == 1 else 's'))",
+      "ec": 4,
+      "outputs": [
+        {
+          "kind": "stream",
+          "data": "Found 1 face\n"
+        }
+      ]
+    },
+    {
+      "type": "code",
+      "src": "#print response\n# print out emotions for each one\nfor result in response['responses']:\n    for annotation in result['faceAnnotations']:\n        for emotion in ['joy','sorrow','surprise','anger']:\n            print \"%s: %s\" % (emotion, annotation[emotion+'Likelihood'])\n        ",
+      "ec": 5,
+      "outputs": [
+        {
+          "kind": "stream",
+          "data": "joy: VERY_LIKELY\nsorrow: VERY_UNLIKELY\nsurprise: VERY_UNLIKELY\nanger: VERY_UNLIKELY\n"
+        }
+      ]
+    },
+    {
+      "type": "code",
+      "src": "",
+      "ec": "",
+      "outputs": []
+    }
+  ]
+}
