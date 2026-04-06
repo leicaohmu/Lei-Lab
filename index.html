@@ -1,337 +1,522 @@
-var cfg={owner:'',repo:'',branch:'main',token:'',title:'TeamBlog'};
-var allPosts=[],curCat='',editId=null,nbData=null;
-var GH='https://api.github.com';
-var CAT={
-  announce:{label:'公告',icon:'📢',cls:'cat-announce'},
-  tech:{label:'技术',icon:'💻',cls:'cat-tech'},
-  life:{label:'生活',icon:'🌱',cls:'cat-life'},
-  share:{label:'分享',icon:'🔗',cls:'cat-share'},
-  discuss:{label:'讨论',icon:'💬',cls:'cat-discuss'},
-  other:{label:'其他',icon:'📌',cls:'cat-other'}
-};
-var COLORS=['#6366f1','#ec4899','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ef4444','#06b6d4'];
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>TeamBlog</title>
+<style>
+:root{--primary:#2563eb;--pl:#eff6ff;--pd:#1d4ed8;--sbg:#0f172a;--st:#94a3b8;--sa:#38bdf8;--bg:#f1f5f9;--card:#fff;--bd:#e2e8f0;--tx:#1e293b;--mu:#64748b;--mu2:#94a3b8;--gn:#16a34a;--rd:#dc2626;--r:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--tx);display:flex;height:100vh;overflow:hidden}
+#sb{width:240px;min-width:240px;background:var(--sbg);display:flex;flex-direction:column;transition:width .3s;overflow:hidden}
+#sb.col{width:0;min-width:0}
+.sb-top{padding:16px 14px 12px;border-bottom:1px solid #1e293b}
+.sb-brand{display:flex;align-items:center;gap:9px}
+.sb-bn{color:#fff;font-size:16px;font-weight:700}
+.sb-bs{color:#475569;font-size:11px;margin-top:2px}
+.sb-nav{flex:1;overflow-y:auto;padding:8px 0}
+.sb-sec{color:#334155;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:10px 14px 3px}
+.sb-it{display:flex;align-items:center;gap:8px;padding:8px 14px;color:var(--st);cursor:pointer;font-size:13px;border-left:3px solid transparent;transition:all .15s;user-select:none;white-space:nowrap}
+.sb-it:hover{background:#1e293b;color:#fff}
+.sb-it.on{background:#1e3a5f;color:var(--sa);border-left-color:var(--sa)}
+.sb-it .ic{width:18px;text-align:center;font-size:14px;flex-shrink:0}
+.sb-cn{margin-left:auto;background:#334155;color:#94a3b8;font-size:10px;padding:1px 6px;border-radius:10px}
+.sb-ft{padding:10px 12px;border-top:1px solid #1e293b}
+.gh-p{background:#1e293b;border-radius:8px;padding:9px 11px;font-size:11px;color:var(--st);display:flex;flex-direction:column;gap:4px}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:#334155}
+.dot.on{background:#22c55e;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+#topbar{background:var(--card);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;padding:0 18px;height:52px;flex-shrink:0}
+#tsb{background:none;border:1px solid var(--bd);border-radius:6px;width:30px;height:30px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;color:var(--mu);transition:all .2s}
+#tsb:hover{background:var(--pl);color:var(--primary)}
+.tbt{font-size:15px;font-weight:600;flex:1}
+.tbr{display:flex;gap:8px;align-items:center}
+.btn{padding:6px 13px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.bp{background:var(--primary);color:#fff}.bp:hover{background:var(--pd)}
+.bo{background:var(--card);color:var(--tx);border:1px solid var(--bd)}.bo:hover{background:var(--pl);border-color:var(--primary);color:var(--primary)}
+.bg{background:var(--gn);color:#fff}.bg:hover{background:#15803d}
+.br{background:var(--rd);color:#fff}.br:hover{background:#b91c1c}
+.bs{padding:5px 11px;font-size:12px}
+#ct{flex:1;overflow:hidden;display:flex;flex-direction:column}
+#setup{background:linear-gradient(135deg,#1e3a5f,#0f172a);padding:22px 28px;flex-shrink:0}
+#setup.h{display:none}
+.st{color:#fff;font-size:16px;font-weight:700;margin-bottom:4px}
+.sd{color:#94a3b8;font-size:12px;margin-bottom:14px;line-height:1.6}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.sf{display:flex;flex-direction:column;gap:4px}
+.sf label{color:#64748b;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.sf input{background:#0f172a;border:1px solid #334155;border-radius:6px;padding:7px 10px;color:#fff;font-size:12px;outline:none;font-family:monospace;transition:border-color .2s}
+.sf input:focus{border-color:#38bdf8}
+.sa{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+#vl{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column}
+.vh{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.vh h2{font-size:20px;font-weight:700;flex:1}
+.si{border:1px solid var(--bd);border-radius:7px;padding:6px 12px;font-size:13px;outline:none;transition:border-color .2s}
+.si:focus{border-color:var(--primary)}
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.pc{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .2s;display:flex;flex-direction:column}
+.pc:hover{box-shadow:0 6px 24px rgba(0,0,0,.1);transform:translateY(-2px)}
+.pc-cv{height:140px;background:linear-gradient(135deg,#1e3a5f,#1e293b);display:flex;align-items:center;justify-content:center;font-size:48px;flex-shrink:0;position:relative;overflow:hidden}
+.pc-cv img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.pc-cv .ce{position:relative;z-index:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.3))}
+.pc-bd{padding:14px;flex:1;display:flex;flex-direction:column}
+.pc-cat{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;margin-bottom:8px;width:fit-content}
+.pc-ti{font-size:15px;font-weight:700;line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pc-ex{font-size:12px;color:var(--mu);line-height:1.6;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pc-ft{display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--bd)}
+.av{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.pc-au{font-size:12px;color:var(--mu);flex:1}
+.pc-dt{font-size:11px;color:var(--mu2)}
+.es{text-align:center;padding:60px 20px;color:var(--mu)}
+.es .ei{font-size:48px;margin-bottom:12px}
+#vp{flex:1;overflow-y:auto;padding:32px 48px;display:none;width:100%}
+.pb{display:flex;align-items:center;gap:6px;color:var(--mu);font-size:13px;cursor:pointer;margin-bottom:20px;transition:color .2s;width:fit-content}
+.pb:hover{color:var(--primary)}
+.pd-ti{font-size:28px;font-weight:800;line-height:1.3;margin-bottom:14px}
+.pd-me{display:flex;align-items:center;gap:14px;color:var(--mu);font-size:13px;margin-bottom:22px;flex-wrap:wrap;padding-bottom:18px;border-bottom:1px solid var(--bd)}
+.pd-cv{width:100%;max-height:400px;object-fit:cover;border-radius:var(--r);margin-bottom:28px;border:1px solid var(--bd)}
+.pd-bd{font-size:15px;line-height:1.9;color:var(--tx)}
+.pd-bd img{max-width:100%;border-radius:8px;margin:12px 0}
+.pd-ac{display:flex;gap:10px;margin-top:32px;padding-top:20px;border-top:1px solid var(--bd)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:1000;padding:12px}
+.ov.h{display:none}
+.mo{background:#fff;border-radius:14px;width:100%;max-width:700px;max-height:95vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.2)}
+.mo-lg{max-width:860px}
+.mo-hd{padding:16px 20px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.mo-hd h3{font-size:17px;font-weight:700}
+.mc{background:none;border:none;font-size:20px;cursor:pointer;color:var(--mu);line-height:1;padding:2px}
+.mo-bd{padding:16px 20px;overflow-y:auto;flex:1}
+.mo-ft{padding:12px 20px;border-top:1px solid var(--bd);display:flex;gap:10px;justify-content:flex-end;flex-shrink:0}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:11px;font-weight:700;color:var(--mu);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+.fg input,.fg textarea,.fg select{width:100%;border:1px solid var(--bd);border-radius:7px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none;transition:border-color .2s;background:#fff;color:var(--tx)}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.fg textarea{resize:vertical;min-height:200px;line-height:1.7}
+.fg .hint{font-size:11px;color:var(--mu2);margin-top:4px}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.wtb{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tb-btn{padding:4px 10px;border:1px solid var(--bd);border-radius:5px;background:#fff;font-size:12px;cursor:pointer;color:var(--mu);transition:all .2s}
+.tb-btn:hover{background:var(--pl);color:var(--primary);border-color:var(--primary)}
+.cat-announce{background:#fef3c7;color:#92400e}
+.cat-tech{background:#dbeafe;color:#1e40af}
+.cat-life{background:#dcfce7;color:#166534}
+.cat-share{background:#ede9fe;color:#5b21b6}
+.cat-discuss{background:#fee2e2;color:#991b1b}
+.cat-other{background:#f1f5f9;color:#475569}
+#ld{position:fixed;inset:0;background:rgba(255,255,255,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2000;gap:12px}
+#ld.h{display:none}
+.sp{width:34px;height:34px;border:3px solid var(--bd);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#ld p{font-size:13px;color:var(--mu)}
+#toast{position:fixed;bottom:20px;right:20px;padding:10px 16px;border-radius:9px;font-size:13px;z-index:3000;transform:translateY(60px);opacity:0;transition:all .3s;pointer-events:none;max-width:320px;background:#1e293b;color:#fff}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.ok{background:#14532d}
+#toast.err{background:#7f1d1d}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-family:monospace}
+.tag{display:inline-block;background:#f1f5f9;color:#475569;padding:2px 8px;border-radius:12px;font-size:11px;margin:2px}
+.hs{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start}
+.hn{background:var(--primary);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
+.ht{font-size:13px;line-height:1.7;color:var(--tx)}
+.nb-cell{margin:0 0 16px 0}
+.nb-md{padding:4px 0}
+.nb-cw{border:1px solid var(--bd);border-radius:8px;overflow:hidden}
+.nb-in{display:flex;align-items:stretch}
+.nb-il{background:#f8fafc;color:#94a3b8;font-size:11px;font-family:monospace;padding:10px 8px;border-right:1px solid var(--bd);min-width:60px;text-align:right;flex-shrink:0;line-height:1.6;user-select:none}
+.nb-ic{flex:1;background:#0f172a;padding:12px 16px;overflow-x:auto;margin:0}
+.nb-ic code{background:transparent;color:#e2e8f0;font-size:13px;font-family:monospace;line-height:1.65;white-space:pre;padding:0}
+.nb-out{display:flex;align-items:stretch;border-top:1px solid var(--bd)}
+.nb-ol{background:#fff8f0;color:#f59e0b;font-size:11px;font-family:monospace;padding:10px 8px;border-right:1px solid var(--bd);min-width:60px;text-align:right;flex-shrink:0;line-height:1.6;user-select:none}
+.nb-ob{flex:1;padding:10px 16px;font-size:13px;line-height:1.7;overflow-x:auto;background:#fff}
+.nb-ob img{max-width:100%;border-radius:6px;display:block;margin:4px 0}
+.nb-ob table{border-collapse:collapse;font-size:12px;width:auto;max-width:100%}
+.nb-ob table th{background:#f1f5f9;padding:5px 12px;border:1px solid var(--bd);font-weight:700;text-align:left}
+.nb-ob table td{padding:4px 12px;border:1px solid var(--bd)}
+.nb-ob table tr:nth-child(even){background:#f8fafc}
+.nb-err{background:#fef2f2;color:#dc2626;font-family:monospace;font-size:12px;padding:10px 16px;white-space:pre-wrap;line-height:1.5}
+.nb-str{color:#475569;font-family:monospace;font-size:12px;white-space:pre-wrap;line-height:1.5}
+.nb-ban{display:flex;align-items:center;gap:10px;background:linear-gradient(90deg,#1e3a5f,#1e293b);color:#94a3b8;font-size:12px;padding:10px 16px;border-radius:8px;margin-bottom:20px}
+.nb-ia{border:2px dashed var(--bd);border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;background:#fafbfc;position:relative}
+.nb-ia:hover,.nb-ia.dov{border-color:var(--primary);background:var(--pl)}
+.nb-ia input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.nb-ii{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;font-size:12px;color:#166534;display:flex;align-items:center;gap:8px;margin-top:8px}
+</style>
+</head>
+<body>
+<div id="ld" class="h"><div class="sp"></div><p id="ld-msg">加载中...</p></div>
 
-// --- 初始化与工具函数 ---
-
-(function(){
-  var tb=document.getElementById('wtb');
-  // 修正：将末尾的中文括号 ）改为英文括号 )
-  var btns=[['**','**','B'],['*','*','I'],['## ','','H2'],['### ','','H3'],['\n- ','','列表'],['\n> ','','引用'],['`','`','代码'],['\n```\n','\n```','代码块'],['![图片](',')','图片'],['[链接](',')','链接']];
-  btns.forEach(function(b){
-    var el=document.createElement('button');
-    el.className='tb-btn';
-    el.textContent=b[2];
-    el.addEventListener('click',function(){insertMd(b[0],b[1]);});
-    tb.appendChild(el);
-  });
-})();
-
-function aColor(n){var h=0;for(var i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))&0xffff;return COLORS[h%COLORS.length];}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function fmtD(d){var t=new Date(d);return t.getFullYear()+'/'+(t.getMonth()+1)+'/'+t.getDate();}
-function fmtDF(d){var t=new Date(d);return t.getFullYear()+'年'+(t.getMonth()+1)+'月'+t.getDate()+'日 '+String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');}
-function showLoad(m){document.getElementById('ld-msg').textContent=m||'加载中...';document.getElementById('ld').classList.remove('h');}
-function hideLoad(){document.getElementById('ld').classList.add('h');}
-
-var _tt=null;
-function toast(m,t){
-  var e=document.getElementById('toast');
-  e.textContent=m; e.className='show'+(t?' '+t:'');
-  if(_tt)clearTimeout(_tt);
-  _tt=setTimeout(function(){e.className='';},3500);
-}
-
-function setSt(on,lbl){
-  document.getElementById('dot-st').className='dot'+(on?' on':'');
-  document.getElementById('txt-st').textContent=lbl||'未连接';
-}
-
-function toggleSb(){document.getElementById('sb').classList.toggle('col');}
-function closeM(id){document.getElementById(id).classList.add('h');}
-function openHowTo(){document.getElementById('hm').classList.remove('h');}
-
-// --- GitHub API 操作 ---
-
-function ghH(){return{'Authorization':'token '+cfg.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'};}
-function ghGet(p){return fetch(GH+p,{headers:ghH()}).then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.message||r.status);return d;});});}
-function ghPut(p,b){return fetch(GH+p,{method:'PUT',headers:ghH(),body:JSON.stringify(b)}).then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.message||r.status);return d;});});}
-function ghDel(p,b){
-  return fetch(GH+p,{method:'DELETE',headers:ghH(),body:JSON.stringify(b)}).then(function(r){
-    if(r.status===204||r.ok) return {};
-    return r.json().then(function(d){throw new Error(d.message||r.status);});
-  });
-}
-
-function b64dec(s){try{return decodeURIComponent(escape(atob(s.replace(/\n/g,''))));}catch(e){return '';}}
-function b64enc(s){return btoa(unescape(encodeURIComponent(s)));}
-
-// --- Markdown 解析器 ---
-
-function renderMD(md){
-  if(!md)return '';
-  var h=esc(md);
-  // 代码块与高亮预览
-  h=h.replace(/```(\w*)\n([\s\S]*?)```/g,function(m,lang,code){
-    return '<pre style="background:#0f172a;color:#e2e8f0;padding:14px;border-radius:8px;overflow-x:auto;font-family:monospace;font-size:13px"><code>'+code+'</code></pre>';
-  });
-  h=h.replace(/`([^`]+)`/g,'<code style="background:var(--pl);color:var(--primary);padding:2px 4px;border-radius:4px">$1</code>');
-  h=h.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img src="$2" alt="$1" style="max-width:100%;border-radius:8px;margin:10px 0"/>');
-  h=h.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" style="color:var(--primary);text-decoration:underline">$1</a>');
-  h=h.replace(/^### (.*$)/gm,'<h3 style="margin:16px 0 8px;font-size:18px">$1</h3>');
-  h=h.replace(/^## (.*$)/gm,'<h2 style="margin:20px 0 10px;font-size:22px;border-bottom:1px solid var(--bd);padding-bottom:5px">$1</h2>');
-  h=h.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
-  h=h.replace(/\*(.*?)\*/g,'<em>$1</em>');
-  h=h.replace(/^\- (.*$)/gm,'<li style="margin-left:20px">$1</li>');
-  h=h.replace(/^&gt; (.*$)/gm,'<blockquote style="border-left:4px solid var(--bd);padding-left:15px;color:var(--mu);margin:10px 0">$1</blockquote>');
-  return h.replace(/\n/g,'<br/>');
-}
-
-// --- Notebook (ipynb) 处理 ---
-
-function parseNb(nb){
-  var cells=nb.cells||[];
-  var title='',nbCells=[];
-  cells.forEach(function(cell){
-    var ct=cell.cell_type;
-    var src=Array.isArray(cell.source)?cell.source.join(''):(cell.source||'');
-    if(ct==='markdown'){
-      if(!title){var m=src.match(/^#\s+(.+)/m);if(m)title=m[1].trim();}
-      nbCells.push({type:'markdown',src:src});
-    } else if(ct==='code'){
-      var ec=cell.execution_count||'';
-      var outs=[];
-      (cell.outputs||[]).forEach(function(out){
-        var ot=out.output_type;
-        if(ot==='display_data'||ot==='execute_result'){
-          var d=out.data||{};
-          if(d['image/png']) outs.push({kind:'image',data:(Array.isArray(d['image/png'])?d['image/png'].join(''):d['image/png']).replace(/\n/g,'')});
-          else if(d['text/plain']) outs.push({kind:'text',data:Array.isArray(d['text/plain'])?d['text/plain'].join(''):d['text/plain']});
-        } else if(ot==='stream') outs.push({kind:'stream',data:Array.isArray(out.text)?out.text.join(''):out.text});
-      });
-      nbCells.push({type:'code',src:src,ec:ec,outputs:outs});
-    }
-  });
-  return {title:title,nbCells:nbCells};
-}
-
-function renderNbCells(nbCells){
-  if(!nbCells) return '';
-  var h='<div class="nb-ban">📓 Jupyter Notebook 内容视图</div>';
-  nbCells.forEach(function(cell){
-    if(cell.type==='markdown') h+='<div class="nb-cell nb-md">'+renderMD(cell.src)+'</div>';
-    else if(cell.type==='code'){
-      h+='<div class="nb-cell nb-cw"><div class="nb-in"><div class="nb-il">In ['+cell.ec+']</div><pre class="nb-ic"><code>'+esc(cell.src)+'</code></pre></div>';
-      (cell.outputs||[]).forEach(function(out){
-        h+='<div class="nb-out"><div class="nb-ol">Out</div><div class="nb-ob">';
-        if(out.kind==='image') h+='<img src="data:image/png;base64,'+out.data+'"/>';
-        else h+='<pre style="font-size:12px;color:var(--mu)">'+esc(out.data)+'</pre>';
-        h+='</div></div>';
-      });
-      h+='</div>';
-    }
-  });
-  return h;
-}
-
-// --- 列表渲染与核心逻辑 ---
-
-function renderList(){
-  var grid=document.getElementById('pg');
-  var q=document.getElementById('s-inp').value.toLowerCase();
-  var sort=document.getElementById('s-sort').value;
-  
-  var posts=allPosts.filter(function(p){
-    if(curCat && p.category!==curCat) return false;
-    return p.title.toLowerCase().includes(q) || p.author.toLowerCase().includes(q);
-  });
-
-  if(sort==='oldest') posts.sort((a,b)=>new Date(a.date)-new Date(b.date));
-  else if(sort==='author') posts.sort((a,b)=>a.author.localeCompare(b.author));
-  else posts.sort((a,b)=>new Date(b.date)-new Date(a.date));
-
-  if(!posts.length){
-    grid.innerHTML='<div class="es" style="grid-column:1/-1"><div class="ei">🔍</div><p>未找到相关内容</p></div>';
-    return;
-  }
-
-  grid.innerHTML=posts.map(function(p){
-    var c=CAT[p.category]||CAT.other;
-    var ac=aColor(p.author);
-    return `
-      <div class="pc" onclick="showPost('${p.id}')">
-        <div class="pc-cv">
-          ${p.cover?`<img src="${p.cover}">`:''}
-          <span class="ce">${p.emoji||'📝'}</span>
-        </div>
-        <div class="pc-bd">
-          <span class="pc-cat ${c.cls}">${c.icon} ${c.label}</span>
-          <div class="pc-ti">${esc(p.title)}</div>
-          <div class="pc-ex">${esc(p.excerpt)}</div>
-          <div class="pc-ft">
-            <div class="av" style="background:${ac}">${p.author[0].toUpperCase()}</div>
-            <div class="pc-au">${esc(p.author)}</div>
-            <div class="pc-dt">${fmtD(p.date)}</div>
-          </div>
-        </div>
-      </div>`;
-  }).join('');
-}
-
-function showPost(id){
-  var p=allPosts.find(x=>x.id===id);
-  if(!p) return;
-  var c=CAT[p.category]||CAT.other;
-  var h=`
-    <h1 class="pd-ti">${esc(p.title)}</h1>
-    <div class="pd-me">
-      <span>👤 ${esc(p.author)}</span>
-      <span>📅 ${fmtDF(p.date)}</span>
-      <span class="pc-cat ${c.cls}">${c.icon} ${c.label}</span>
+<div id="sb">
+  <div class="sb-top">
+    <div class="sb-brand">
+      <span style="font-size:22px">📰</span>
+      <div><div class="sb-bn">TeamBlog</div><div class="sb-bs">协作博客平台</div></div>
     </div>
-    ${p.cover?`<img src="${p.cover}" class="pd-cv">`:''}
-    <div class="pd-bd">
-      ${p.isNotebook ? renderNbCells(p.nbCells) : renderMD(p.content)}
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sec">栏目</div>
+    <div class="sb-it on" id="cat-all" onclick="filterCat('')"><span class="ic">🏠</span>全部帖子<span class="sb-cn" id="cnt-all">0</span></div>
+    <div class="sb-it" id="cat-announce" onclick="filterCat('announce')"><span class="ic">📢</span>公告<span class="sb-cn" id="cnt-announce">0</span></div>
+    <div class="sb-it" id="cat-tech" onclick="filterCat('tech')"><span class="ic">💻</span>技术<span class="sb-cn" id="cnt-tech">0</span></div>
+    <div class="sb-it" id="cat-life" onclick="filterCat('life')"><span class="ic">🌱</span>生活<span class="sb-cn" id="cnt-life">0</span></div>
+    <div class="sb-it" id="cat-share" onclick="filterCat('share')"><span class="ic">🔗</span>分享<span class="sb-cn" id="cnt-share">0</span></div>
+    <div class="sb-it" id="cat-discuss" onclick="filterCat('discuss')"><span class="ic">💬</span>讨论<span class="sb-cn" id="cnt-discuss">0</span></div>
+    <div class="sb-it" id="cat-other" onclick="filterCat('other')"><span class="ic">📌</span>其他<span class="sb-cn" id="cnt-other">0</span></div>
+    <div class="sb-sec" style="margin-top:8px">操作</div>
+    <div class="sb-it" onclick="openWrite()"><span class="ic">✏</span>写新帖子</div>
+    <div class="sb-it" onclick="loadPosts(true)"><span class="ic">🔄</span>刷新内容</div>
+    <div class="sb-it" onclick="openSetup()"><span class="ic">⚙</span>GitHub 设置</div>
+    <div class="sb-it" onclick="openHowTo()"><span class="ic">❓</span>使用帮助</div>
+  </nav>
+  <div class="sb-ft">
+    <div class="gh-p">
+      <div style="display:flex;align-items:center;gap:6px"><div class="dot" id="dot-st"></div><span id="txt-st">未连接</span></div>
+      <div style="font-size:10px;color:#475569;margin-top:2px" id="txt-repo">请先配置 GitHub</div>
     </div>
-    <div class="pd-ac">
-      <button class="btn bo bs" onclick="editPost('${p.id}')">✏️ 编辑</button>
-      <button class="btn bo bs" style="color:var(--rd)" onclick="deletePost('${p.id}')">🗑️ 删除</button>
-    </div>`;
-  document.getElementById('pd').innerHTML=h;
-  document.getElementById('vl').style.display='none';
-  document.getElementById('vp').style.display='block';
-  document.getElementById('vp').scrollTop=0;
-}
+  </div>
+</div>
 
-function showList(){
-  document.getElementById('vp').style.display='none';
-  document.getElementById('vl').style.display='flex';
-}
+<div id="main">
+  <div id="topbar">
+    <button id="tsb" onclick="toggleSb()">☰</button>
+    <div class="tbt" id="tb-title">TeamBlog 协作博客</div>
+    <div class="tbr">
+      <button class="btn bo bs" onclick="loadPosts(true)">🔄 刷新</button>
+      <button class="btn bg bs" onclick="openWrite()">✏ 写帖子</button>
+      <button class="btn bo bs" onclick="openSetup()">⚙ 设置</button>
+    </div>
+  </div>
+  <div id="ct">
+    <div id="setup">
+      <div class="st">🔗 连接 GitHub 仓库</div>
+      <div class="sd">帖子存储在 <code>posts/</code> 目录，每篇独立 JSON 文件，GitHub Pages 自动发布。</div>
+      <div class="sg">
+        <div class="sf"><label>GitHub 用户名</label><input id="cfg-owner" placeholder="your-username"/></div>
+        <div class="sf"><label>仓库名称</label><input id="cfg-repo" placeholder="team-blog"/></div>
+        <div class="sf"><label>分支</label><input id="cfg-branch" value="main"/></div>
+        <div class="sf"><label>博客标题</label><input id="cfg-title" value="TeamBlog"/></div>
+        <div class="sf" style="grid-column:1/-1"><label>Personal Access Token</label><input id="cfg-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"/></div>
+      </div>
+      <div class="sa">
+        <button class="btn bg bs" onclick="connectGH()">🔌 连接并加载帖子</button>
+        <button class="btn bs" style="background:transparent;border:1px solid #334155;color:#94a3b8" onclick="loadSavedCfg()">↩ 读取已保存配置</button>
+        <button class="btn bs" style="background:transparent;border:1px solid #334155;color:#94a3b8" onclick="openHowTo()">❓ 帮助</button>
+      </div>
+    </div>
+    <div id="vl">
+      <div class="vh">
+        <h2 id="v-title">🏠 全部帖子</h2>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <input class="si" id="s-inp" placeholder="🔍 搜索帖子..." oninput="renderList()" style="width:180px"/>
+          <select class="si" id="s-sort" onchange="renderList()" style="width:auto">
+            <option value="newest">最新优先</option>
+            <option value="oldest">最旧优先</option>
+            <option value="author">按作者</option>
+          </select>
+        </div>
+      </div>
+      <div class="pg" id="pg">
+        <div class="es" style="grid-column:1/-1"><div class="ei">📰</div><p>请先连接 GitHub 仓库<br/>或点击「写帖子」发布第一篇内容</p></div>
+      </div>
+    </div>
+    <div id="vp">
+      <div class="pb" onclick="showList()">← 返回列表</div>
+      <div id="pd"></div>
+    </div>
+  </div>
+</div>
+<!-- Write Modal -->
+<div class="ov h" id="wm">
+  <div class="mo mo-lg">
+    <div class="mo-hd"><h3 id="wm-title">✏️ 写新帖子</h3><button class="mc" onclick="closeM('wm')">&times;</button></div>
+    <div class="mo-bd">
+      <div class="fg"><label>标题</label><input id="w-ti" placeholder="帖子标题"/></div>
+      <div class="fg-row">
+        <div class="fg"><label>分类</label>
+          <select id="w-cat">
+            <option value="announce">📢 公告</option>
+            <option value="tech" selected>💻 技术</option>
+            <option value="life">🌱 生活</option>
+            <option value="share">🔗 分享</option>
+            <option value="discuss">💬 讨论</option>
+            <option value="other">📌 其他</option>
+          </select>
+        </div>
+        <div class="fg"><label>作者</label><input id="w-au" placeholder="你的名字"/></div>
+      </div>
+      <div class="fg-row">
+        <div class="fg"><label>封面图 URL（可选）</label><input id="w-cv" placeholder="https://..."/></div>
+        <div class="fg"><label>Emoji 图标（可选）</label><input id="w-em" placeholder="📝"/></div>
+      </div>
+      <div class="fg"><label>标签（逗号分隔）</label><input id="w-tg" placeholder="Python, 教程, AI"/></div>
+      <div class="fg">
+        <label>导入 Notebook（可选）</label>
+        <div class="nb-ia" id="nb-drop" ondragover="nbDragOver(event)" ondragleave="nbDragLeave(event)" ondrop="nbDrop(event)">
+          <input type="file" accept=".ipynb" onchange="nbFileSelect(event)"/>
+          <div>📓 拖拽 .ipynb 文件到此处，或点击选择</div>
+          <div style="font-size:11px;color:var(--mu2);margin-top:4px">支持 Jupyter Notebook 格式</div>
+        </div>
+        <div class="nb-ii" id="nb-info" style="display:none">
+          <span>✅</span><span id="nb-name">notebook.ipynb</span>
+          <button class="btn bs bo" onclick="clearNb()" style="margin-left:auto">✖ 移除</button>
+        </div>
+      </div>
+      <div class="fg">
+        <label>内容（Markdown）</label>
+        <div class="wtb" id="wtb"></div>
+        <textarea id="w-co" placeholder="支持 Markdown 语法..."></textarea>
+        <div class="hint">支持标准 Markdown：标题、列表、引用、代码块、图片、链接等</div>
+      </div>
+    </div>
+    <div class="mo-ft">
+      <button class="btn bo" onclick="previewPost()">👁 预览</button>
+      <button class="btn bg" onclick="publishPost()">🚀 发布</button>
+    </div>
+  </div>
+</div>
 
-function filterCat(cat){
-  curCat=cat;
-  document.querySelectorAll('.sb-it').forEach(el=>el.classList.remove('on'));
-  document.getElementById('cat-'+(cat||'all')).classList.add('on');
-  document.getElementById('v-title').textContent=cat? (CAT[cat].icon+' '+CAT[cat].label) : '🏠 全部帖子';
-  showList(); renderList();
-}
+<!-- Preview Modal -->
+<div class="ov h" id="pm">
+  <div class="mo mo-lg">
+    <div class="mo-hd"><h3>👁 帖子预览</h3><button class="mc" onclick="closeM('pm')">&times;</button></div>
+    <div class="mo-bd" id="pm-bd"></div>
+    <div class="mo-ft"><button class="btn bo" onclick="closeM('pm')">关闭预览</button></div>
+  </div>
+</div>
 
-function updateCounts(){
-  document.getElementById('cnt-all').textContent=allPosts.length;
-  Object.keys(CAT).forEach(k=>{
-    var n=allPosts.filter(p=>p.category===k).length;
-    document.getElementById('cnt-'+k).textContent=n;
+<!-- Help Modal -->
+<div class="ov h" id="hm">
+  <div class="mo">
+    <div class="mo-hd"><h3>❓ 使用帮助</h3><button class="mc" onclick="closeM('hm')">&times;</button></div>
+    <div class="mo-bd">
+      <div class="hs"><div class="hn">1</div><div class="ht"><strong>创建 GitHub 仓库</strong><br/>新建一个公开或私有仓库，用于存储博客帖子。</div></div>
+      <div class="hs"><div class="hn">2</div><div class="ht"><strong>生成 Token</strong><br/>Settings → Developer settings → Personal access tokens → 勾选 <code>repo</code> 权限。</div></div>
+      <div class="hs"><div class="hn">3</div><div class="ht"><strong>填写配置</strong><br/>在顶部配置区填写用户名、仓库名、Token，点击「连接」。</div></div>
+      <div class="hs"><div class="hn">4</div><div class="ht"><strong>开始写作</strong><br/>点击「写帖子」，支持 Markdown 和 Jupyter Notebook 导入。</div></div>
+      <div class="hs"><div class="hn">5</div><div class="ht"><strong>团队协作</strong><br/>将仓库设为协作者共享，多人可同时发布帖子。</div></div>
+      <div class="hs"><div class="hn">6</div><div class="ht"><strong>Notebook 支持</strong><br/>导入 .ipynb 文件，自动解析代码、输出和 Markdown 单元格。</div></div>
+    </div>
+    <div class="mo-ft"><button class="btn bo" onclick="closeM('hm')">知道了</button></div>
+  </div>
+</div>
+
+<!-- Setup Modal -->
+<div class="ov h" id="sm">
+  <div class="mo">
+    <div class="mo-hd"><h3>⚙ GitHub 设置</h3><button class="mc" onclick="closeM('sm')">&times;</button></div>
+    <div class="mo-bd">
+      <div class="fg"><label>GitHub 用户名</label><input id="sm-owner"/></div>
+      <div class="fg"><label>仓库名称</label><input id="sm-repo"/></div>
+      <div class="fg"><label>分支</label><input id="sm-branch" value="main"/></div>
+      <div class="fg"><label>博客标题</label><input id="sm-title" value="TeamBlog"/></div>
+      <div class="fg"><label>Personal Access Token</label><input id="sm-token" type="password"/></div>
+    </div>
+    <div class="mo-ft">
+      <button class="btn bo" onclick="closeM('sm')">取消</button>
+      <button class="btn bg" onclick="saveSetup()">保存并连接</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+// ===== 接上面的代码，追加到 teamblog.html 文件末尾 =====
+
+function loadPosts(st){
+  if(!cfg.owner||!cfg.repo||!cfg.token)return Promise.resolve();
+  if(st)showLoad('\u6B63\u5728\u52A0\u8F7D\u5E16\u5B50...');
+  return ghGet('/repos/'+cfg.owner+'/'+cfg.repo+'/contents/posts?ref='+cfg.branch).then(function(files){
+    if(!Array.isArray(files)){allPosts=[];updateCounts();renderList();if(st)hideLoad();return;}
+    var proms=files.filter(function(f){return f.name.endsWith('.json');}).map(function(f){
+      return ghGet('/repos/'+cfg.owner+'/'+cfg.repo+'/contents/posts/'+f.name+'?ref='+cfg.branch).then(function(d){
+        try{var post=JSON.parse(b64dec(d.content));post._sha=d.sha;post._path='posts/'+f.name;return post;}catch(e){return null;}
+      }).catch(function(){return null;});
+    });
+    return Promise.all(proms).then(function(results){
+      allPosts=results.filter(function(r){return r!==null;});updateCounts();renderList();
+      if(st){hideLoad();toast('\u5DF2\u52A0\u8F7D '+allPosts.length+' \u7BC7\u5E16\u5B50','ok');}
+    });
+  }).catch(function(e){
+    if(e.message&&e.message.indexOf('Not Found')>=0){allPosts=[];updateCounts();renderList();}
+    else{toast('\u52A0\u8F7D\u5931\u8D25\uFF1A'+e.message,'err');}
+    if(st)hideLoad();
   });
-}
-
-// --- 文章保存、编辑、删除 ---
-
-function publishPost(){
-  var ti=document.getElementById('w-ti').value.trim();
-  var co=document.getElementById('w-co').value.trim();
-  if(!ti||!co){toast('标题和内容不能为空','err');return;}
-  
-  var id=editId||('post-'+Date.now());
-  var obj={
-    id:id, title:ti, author:document.getElementById('w-au').value||'匿名',
-    category:document.getElementById('w-cat').value, date:new Date().toISOString(),
-    content:co, excerpt:co.substring(0,100).replace(/[#*`]/g,''), 
-    emoji:document.getElementById('w-em').value||'📝', cover:document.getElementById('w-cv').value,
-    isNotebook: !!nbData, nbCells: nbData ? nbData.nbCells : null
-  };
-  
-  showLoad('同步至 GitHub...');
-  var body={message:'Update post',content:b64enc(JSON.stringify(obj,null,2)),branch:cfg.branch};
-  if(editId){
-    var old=allPosts.find(p=>p.id===editId);
-    if(old) body.sha=old._sha;
-  }
-  
-  ghPut('/repos/'+cfg.owner+'/'+cfg.repo+'/contents/posts/'+id+'.json', body)
-    .then(()=>{
-      toast('发布成功','ok'); closeM('wm'); loadPosts(false);
-    }).catch(e=>toast('发布失败：'+e.message,'err'));
-}
-
-function deletePost(id){
-  if(!confirm('确定永久删除这篇文章吗？')) return;
-  var p=allPosts.find(x=>x.id===id);
-  showLoad('正在删除...');
-  ghDel('/repos/'+cfg.owner+'/'+cfg.repo+'/contents/posts/'+p._fn, {message:'Delete post',sha:p._sha,branch:cfg.branch})
-    .then(()=>{ toast('已删除'); showList(); loadPosts(false); })
-    .catch(e=>toast('删除失败','err'));
-}
-
-function editPost(id){
-  var p=allPosts.find(x=>x.id===id);
-  editId=id;
-  document.getElementById('wm-title').textContent='✏️ 编辑帖子';
-  document.getElementById('w-ti').value=p.title;
-  document.getElementById('w-au').value=p.author;
-  document.getElementById('w-co').value=p.content;
-  document.getElementById('w-cat').value=p.category;
-  document.getElementById('w-em').value=p.emoji||'';
-  document.getElementById('w-cv').value=p.cover||'';
-  document.getElementById('wm').classList.remove('h');
 }
 
 function openWrite(){
-  editId=null; nbData=null;
-  document.getElementById('wm-title').textContent='✏️ 写新帖子';
-  document.getElementById('w-ti').value='';
-  document.getElementById('w-co').value='';
+  editId=null;nbData=null;
+  document.getElementById('wm-title').textContent='\u270F\uFE0F \u5199\u65B0\u5E16\u5B50';
+  document.getElementById('w-ti').value='';document.getElementById('w-cat').value='tech';
+  document.getElementById('w-au').value=localStorage.getItem('tb_author')||'';
+  document.getElementById('w-cv').value='';document.getElementById('w-em').value='';
+  document.getElementById('w-tg').value='';document.getElementById('w-co').value='';
   document.getElementById('nb-info').style.display='none';
   document.getElementById('wm').classList.remove('h');
 }
 
+function editPost(id){
+  var p=allPosts.find(function(x){return x.id===id;});if(!p)return;editId=id;
+  document.getElementById('wm-title').textContent='\u270F\uFE0F \u7F16\u8F91\u5E16\u5B50';
+  document.getElementById('w-ti').value=p.title||'';document.getElementById('w-cat').value=p.category||'other';
+  document.getElementById('w-au').value=p.author||'';document.getElementById('w-cv').value=p.cover||'';
+  document.getElementById('w-em').value=p.emoji||'';document.getElementById('w-tg').value=(p.tags||[]).join(', ');
+  document.getElementById('w-co').value=p.content||'';
+  if(p.nbCells){nbData={nbCells:p.nbCells};document.getElementById('nb-info').style.display='flex';document.getElementById('nb-name').textContent='\u5DF2\u6709 Notebook';}
+  else{nbData=null;document.getElementById('nb-info').style.display='none';}
+  document.getElementById('wm').classList.remove('h');
+}
+
 function previewPost(){
-  var ti=document.getElementById('w-ti').value||'无标题';
-  var co=document.getElementById('w-co').value;
-  var h=`<h1 class="pd-ti">${esc(ti)}</h1><div class="pd-bd">${nbData?renderNbCells(nbData.nbCells):renderMD(co)}</div>`;
-  document.getElementById('pm-bd').innerHTML=h;
-  document.getElementById('pm').classList.remove('h');
+  var ti=document.getElementById('w-ti').value.trim();var co=document.getElementById('w-co').value.trim();
+  if(!ti||!co){toast('\u8BF7\u586B\u5199\u6807\u9898\u548C\u5185\u5BB9','err');return;}
+  var cat=document.getElementById('w-cat').value;var c=CAT[cat]||CAT.other;
+  var h='<span class="pc-cat '+c.cls+'">'+c.icon+' '+c.label+'</span>';
+  h+='<div class="pd-ti">'+esc(ti)+'</div>';
+  h+='<div style="margin:12px 0;color:var(--mu);font-size:13px">'+esc(document.getElementById('w-au').value||'\u533F\u540D')+' \u00B7 \u9884\u89C8</div>';
+  if(nbData&&nbData.nbCells){h+='<div class="pd-bd">'+renderNbCells(nbData.nbCells)+'</div>';}
+  else{h+='<div class="pd-bd">'+renderMD(co)+'</div>';}
+  document.getElementById('pm-bd').innerHTML=h;document.getElementById('pm').classList.remove('h');
 }
 
-// --- 初始化与 GitHub 连接 ---
-
-function loadPosts(msg){
-  if(msg) showLoad('正在加载...');
-  return ghGet('/repos/'+cfg.owner+'/'+cfg.repo+'/contents/posts?ref='+cfg.branch)
-    .then(files=>{
-      var list=Array.isArray(files)?files.filter(f=>f.name.endsWith('.json')):[];
-      return Promise.all(list.map(f=>ghGet('/repos/'+cfg.owner+'/'+cfg.repo+'/contents/posts/'+f.name+'?ref='+cfg.branch)));
-    }).then(datas=>{
-      allPosts=datas.map(d=>{
-        var p=JSON.parse(b64dec(d.content));
-        p._sha=d.sha; p._fn=d.name; return p;
-      });
-      renderList(); updateCounts(); hideLoad();
-    }).catch(e=>{ hideLoad(); console.error(e); });
+function publishPost(){
+  var ti=document.getElementById('w-ti').value.trim();var cat=document.getElementById('w-cat').value;
+  var au=document.getElementById('w-au').value.trim();var co=document.getElementById('w-co').value.trim();
+  if(!ti||!au||!co){toast('\u8BF7\u586B\u5199\u6807\u9898\u3001\u4F5C\u8005\u548C\u5185\u5BB9','err');return;}
+  if(!cfg.token){toast('\u8BF7\u5148\u914D\u7F6E GitHub Token','err');return;}
+  localStorage.setItem('tb_author',au);
+  var cv=document.getElementById('w-cv').value.trim();var em=document.getElementById('w-em').value.trim()||'\uD83D\uDCDD';
+  var tg=document.getElementById('w-tg').value.split(',').map(function(s){return s.trim();}).filter(Boolean);
+  var excerpt=co.replace(/[#*`>\-\[\]!()]/g,'').substring(0,120);
+  var id=editId||('post-'+Date.now()+'-'+Math.random().toString(36).substr(2,6));
+  var post={id:id,title:ti,category:cat,author:au,content:co,cover:cv,emoji:em,tags:tg,excerpt:excerpt,
+    date:editId?(allPosts.find(function(x){return x.id===editId;})||{}).date||new Date().toISOString():new Date().toISOString(),
+    updated:new Date().toISOString()};
+  if(nbData&&nbData.nbCells)post.nbCells=nbData.nbCells;
+  var path='posts/'+id+'.json';
+  var body={message:(editId?'Update':'Add')+': '+ti,content:b64enc(JSON.stringify(post,null,2)),branch:cfg.branch};
+  if(editId){var old=allPosts.find(function(x){return x.id===editId;});if(old&&old._sha)body.sha=old._sha;}
+  showLoad('\u6B63\u5728\u53D1\u5E03...');closeM('wm');
+  ghPut('/repos/'+cfg.owner+'/'+cfg.repo+'/contents/'+path,body).then(function(){
+    toast('\u53D1\u5E03\u6210\u529F\uFF01','ok');return loadPosts(false);
+  }).then(function(){hideLoad();}).catch(function(e){hideLoad();toast('\u53D1\u5E03\u5931\u8D25\uFF1A'+e.message,'err');});
 }
 
+function deletePost(id){
+  if(!confirm('\u786E\u5B9A\u8981\u5220\u9664\u8FD9\u7BC7\u5E16\u5B50\u5417\uFF1F'))return;
+  var p=allPosts.find(function(x){return x.id===id;});
+  if(!p||!p._sha){toast('\u65E0\u6CD5\u5220\u9664','err');return;}
+  showLoad('\u6B63\u5728\u5220\u9664...');
+  ghDel('/repos/'+cfg.owner+'/'+cfg.repo+'/contents/'+(p._path||'posts/'+id+'.json'),{message:'Delete: '+p.title,sha:p._sha,branch:cfg.branch}).then(function(){
+    toast('\u5DF2\u5220\u9664','ok');showList();return loadPosts(false);
+  }).then(function(){hideLoad();}).catch(function(e){hideLoad();toast('\u5220\u9664\u5931\u8D25\uFF1A'+e.message,'err');});
+}
+
+function parseNb(json){
+  var nb=JSON.parse(json);var cells=[];
+  (nb.cells||[]).forEach(function(cell){
+    var src=Array.isArray(cell.source)?cell.source.join(''):cell.source||'';
+    var outputs=[];
+    if(cell.outputs){cell.outputs.forEach(function(out){
+      if(out.output_type==='stream'){outputs.push({type:'stream',text:Array.isArray(out.text)?out.text.join(''):out.text||''});}
+      else if(out.output_type==='error'){outputs.push({type:'error',text:(out.traceback||[]).join('\n')});}
+      else if(out.output_type==='execute_result'||out.output_type==='display_data'){
+        var d=out.data||{};
+        if(d['image/png']){outputs.push({type:'image',data:'data:image/png;base64,'+d['image/png'].replace(/\n/g,'')});}
+        else if(d['text/html']){outputs.push({type:'html',text:Array.isArray(d['text/html'])?d['text/html'].join(''):d['text/html']});}
+        else if(d['text/plain']){outputs.push({type:'text',text:Array.isArray(d['text/plain'])?d['text/plain'].join(''):d['text/plain']});}
+      }
+    });}
+    cells.push({type:cell.cell_type,source:src,outputs:outputs,execCount:cell.execution_count||null});
+  });
+  return cells;
+}
+
+function renderNbCells(cells){
+  var h='<div class="nb-ban">\uD83D\uDCD3 Jupyter Notebook \u00B7 '+cells.length+' cells</div>';
+  cells.forEach(function(cell,i){
+    h+='<div class="nb-cell">';
+    if(cell.type==='markdown'){h+='<div class="nb-md">'+renderMD(cell.source)+'</div>';}
+    else if(cell.type==='code'){
+      h+='<div class="nb-cw"><div class="nb-in">';
+      h+='<div class="nb-il">In ['+(cell.execCount||' ')+']:</div>';
+      h+='<pre class="nb-ic"><code>'+esc(cell.source)+'</code></pre></div>';
+      if(cell.outputs&&cell.outputs.length){cell.outputs.forEach(function(out){
+        h+='<div class="nb-out"><div class="nb-ol">Out:</div><div class="nb-ob">';
+        if(out.type==='image'){h+='<img src="'+out.data+'"/>';}
+        else if(out.type==='html'){h+=out.text;}
+        else if(out.type==='error'){h+='<div class="nb-err">'+esc(out.text)+'</div>';}
+        else if(out.type==='stream'){h+='<div class="nb-str">'+esc(out.text)+'</div>';}
+        else{h+='<div class="nb-str">'+esc(out.text||'')+'</div>';}
+        h+='</div></div>';
+      });}
+      h+='</div>';
+    }
+    h+='</div>';
+  });
+  return h;
+}
+
+function nbToMd(cells){
+  var md='';cells.forEach(function(cell){
+    if(cell.type==='markdown'){md+=cell.source+'\n\n';}
+    else if(cell.type==='code'){md+='```python\n'+cell.source+'\n```\n\n';}
+  });
+  return md.trim();
+}
+
+function nbDragOver(e){e.preventDefault();document.getElementById('nb-drop').classList.add('dov');}
+function nbDragLeave(e){document.getElementById('nb-drop').classList.remove('dov');}
+function nbDrop(e){e.preventDefault();document.getElementById('nb-drop').classList.remove('dov');if(e.dataTransfer.files.length)loadNbFile(e.dataTransfer.files[0]);}
+function nbFileSelect(e){if(e.target.files.length)loadNbFile(e.target.files[0]);}
+function loadNbFile(file){
+  if(!file.name.endsWith('.ipynb')){toast('\u8BF7\u9009\u62E9 .ipynb \u6587\u4EF6','err');return;}
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var cells=parseNb(e.target.result);nbData={nbCells:cells,filename:file.name};
+      document.getElementById('nb-info').style.display='flex';document.getElementById('nb-name').textContent=file.name+' ('+cells.length+' cells)';
+      var co=document.getElementById('w-co');if(!co.value.trim())co.value=nbToMd(cells);
+      toast('Notebook \u5DF2\u5BFC\u5165','ok');
+    }catch(err){toast('\u89E3\u6790\u5931\u8D25\uFF1A'+err.message,'err');}
+  };
+  reader.readAsText(file);
+}
+function clearNb(){nbData=null;document.getElementById('nb-info').style.display='none';}
+
+function loadSavedCfg(){
+  try{var s=JSON.parse(localStorage.getItem('tb_cfg')||'{}');
+    ['owner','repo','branch','token','title'].forEach(function(k){if(s[k])document.getElementById('cfg-'+k).value=s[k];});
+    toast('\u5DF2\u8BFB\u53D6\u4FDD\u5B58\u7684\u914D\u7F6E');
+  }catch(e){toast('\u8BFB\u53D6\u5931\u8D25','err');}
+}
+function readCfg(){
+  cfg.owner=document.getElementById('cfg-owner').value.trim();cfg.repo=document.getElementById('cfg-repo').value.trim();
+  cfg.branch=document.getElementById('cfg-branch').value.trim()||'main';cfg.token=document.getElementById('cfg-token').value.trim();
+  cfg.title=document.getElementById('cfg-title').value.trim()||'TeamBlog';
+}
 function connectGH(){
-  readCfg();
-  if(!cfg.owner||!cfg.token){toast('请完整填写配置','err');return;}
-  showLoad('验证连接...');
-  ghGet('/repos/'+cfg.owner+'/'+cfg.repo).then(()=>{
+  readCfg();if(!cfg.owner||!cfg.repo||!cfg.token){toast('\u8BF7\u586B\u5199\u5B8C\u6574\u914D\u7F6E','err');return;}
+  showLoad('\u6B63\u5728\u8FDE\u63A5 GitHub...');
+  ghGet('/repos/'+cfg.owner+'/'+cfg.repo).then(function(){
     localStorage.setItem('tb_cfg',JSON.stringify(cfg));
-    setSt(true,cfg.owner);
+    setSt(true,'\u5DF2\u8FDE\u63A5 '+cfg.owner);
+    document.getElementById('txt-repo').textContent=cfg.owner+'/'+cfg.repo;
+    document.getElementById('tb-title').textContent=cfg.title;
     document.getElementById('setup').classList.add('h');
-    loadPosts(true);
-  }).catch(e=>toast('连接失败：'+e.message,'err'));
+    return loadPosts(false);
+  }).then(function(){hideLoad();toast('\u8FDE\u63A5\u6210\u529F\uFF0C\u5E16\u5B50\u5DF2\u52A0\u8F7D','ok');})
+  .catch(function(e){hideLoad();toast('\u8FDE\u63A5\u5931\u8D25\uFF1A'+e.message,'err');});
 }
 
-window.onload=function(){
-  var s=localStorage.getItem('tb_cfg');
-  if(s){ 
-    cfg=JSON.parse(s); 
-    ['owner','repo','branch','token','title'].forEach(k=>{
-      var el=document.getElementById('cfg-'+k);
-      if(el) el.value=cfg[k]||'';
-    });
-    connectGH(); 
-  }
-};
-
-// 重用原代码中的 Notebook 相关绑定逻辑 (nbFileSelect, nbDrop 等) 保持不变
-function nbToMd(nbCells){ /* 保持原样 */ }
-function insertMd(a,b){ /* 保持原样 */ }
+(function(){
+  try{var s=JSON.parse(localStorage.getItem('tb_cfg')||'{}');
+    if(s.owner&&s.repo&&s.token){
+      cfg=Object.assign(cfg,s);
+      document.getElementById('cfg-owner').value=s.owner||'';document.getElementById('cfg-repo').value=s.repo||'';
+      document.getElementById('cfg-branch').value=s.branch||'main';document.getElementById('cfg-title').value=s.title||'TeamBlog';
+      document.getElementById('cfg-token').value=s.token||'';connectGH();
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
