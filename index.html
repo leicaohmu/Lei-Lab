@@ -41,7 +41,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .btn-red{background:var(--red);color:#fff}.btn-red:hover{background:#b91c1c}
 .btn-sm{padding:5px 11px;font-size:12px}
 #content{flex:1;overflow:hidden;display:flex;flex-direction:column}
-/* Setup Banner */
 #setup-banner{background:linear-gradient(135deg,#1e3a5f,#0f172a);padding:22px 28px;flex-shrink:0}
 #setup-banner.hidden{display:none}
 .setup-title{color:#fff;font-size:16px;font-weight:700;margin-bottom:4px}
@@ -52,7 +51,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .sf input{background:#0f172a;border:1px solid #334155;border-radius:6px;padding:7px 10px;color:#fff;font-size:12px;outline:none;font-family:monospace;transition:border-color .2s}
 .sf input:focus{border-color:#38bdf8}
 .setup-actions{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
-/* List View */
 #view-list{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column}
 .view-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
 .view-header h2{font-size:20px;font-weight:700;flex:1}
@@ -74,7 +72,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .post-card-date{font-size:11px;color:var(--muted2)}
 .empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
 .empty-state .es-icon{font-size:48px;margin-bottom:12px}
-/* Post Detail - 撑满宽度 */
 #view-post{flex:1;overflow-y:auto;padding:32px 48px;display:none;width:100%}
 .post-back{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;cursor:pointer;margin-bottom:20px;transition:color .2s;width:fit-content}
 .post-back:hover{color:var(--primary)}
@@ -85,7 +82,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .post-detail-body{font-size:15px;line-height:1.9;color:var(--text)}
 .post-detail-body img{max-width:100%;border-radius:8px;margin:12px 0}
 .post-detail-actions{display:flex;gap:10px;margin-top:32px;padding-top:20px;border-top:1px solid var(--border)}
-/* Modals */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:1000;padding:12px}
 .overlay.hidden{display:none}
 .modal{background:#fff;border-radius:14px;width:100%;max-width:700px;max-height:95vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.2)}
@@ -243,7 +239,7 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
         <div class="fg"><label>封面图片 URL（可选）</label><input id="w-cover" placeholder="https://..."/></div>
       </div>
       <div class="fg-row">
-        <div class="fg"><label>封面 Emoji</label><input id="w-emoji" placeholder="&#x1F4DD;" maxlength="4" style="width:80px"/></div>
+        <div class="fg"><label>封面 Emoji</label><input id="w-emoji" placeholder="📝" maxlength="4" style="width:80px"/></div>
         <div class="fg"><label>标签（逗号分隔）</label><input id="w-tags" placeholder="标签1, 标签2"/></div>
       </div>
       <div class="fg">
@@ -299,10 +295,10 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
       <div class="howto-step"><div class="howto-num">1</div><div class="howto-text">创建 <strong>Public</strong> 仓库，开启 <strong>GitHub Pages</strong>（Settings → Pages → Deploy from branch → main）</div></div>
       <div class="howto-step"><div class="howto-num">2</div><div class="howto-text">将本 HTML 文件命名为 <code>index.html</code> 上传到仓库根目录</div></div>
       <div class="howto-step"><div class="howto-num">3</div><div class="howto-text">获取 Token：GitHub → Settings → Developer settings → Personal access tokens → 勾选 <code>repo</code> 权限</div></div>
-      <div class="howto-step"><div class="howto-num">4</div><div class="howto-text">填入配置点击「连接」，<strong>连接成功后配置栏自动隐藏</strong></div></div>
+      <div class="howto-step"><div class="howto-num">4</div><div class="howto-text">填入配置点击「连接」，连接成功后配置栏自动隐藏</div></div>
       <div class="howto-step"><div class="howto-num">5</div><div class="howto-text">点击「写帖子」发布，约 <strong>1 分钟</strong>后 GitHub Pages 自动更新</div></div>
       <div style="background:#fef9c3;border:1px solid #fde047;border-radius:8px;padding:12px;font-size:12px;margin-top:8px">
-        &#x1F4A1; Token 仅存本地浏览器，不会上传。多人同时发帖不会冲突。
+        💡 Token 仅存本地浏览器，不会上传。多人同时发帖不会冲突。
       </div>
     </div>
     <div class="modal-ft"><button class="btn btn-primary" onclick="closeModal('howto-modal')">明白了</button></div>
@@ -330,12 +326,12 @@ var currentCat='';
 var editingPostId=null;
 var GH='https://api.github.com';
 var CAT={
-  announce:{label:'公告',icon:'&#x1F4E2;',cls:'cat-announce'},
-  tech:{label:'技术',icon:'&#x1F4BB;',cls:'cat-tech'},
-  life:{label:'生活',icon:'&#x1F331;',cls:'cat-life'},
-  share:{label:'分享',icon:'&#x1F517;',cls:'cat-share'},
-  discuss:{label:'讨论',icon:'&#x1F4AC;',cls:'cat-discuss'},
-  other:{label:'其他',icon:'&#x1F4CC;',cls:'cat-other'}
+  announce:{label:'公告',icon:'📢',cls:'cat-announce'},
+  tech:{label:'技术',icon:'💻',cls:'cat-tech'},
+  life:{label:'生活',icon:'🌱',cls:'cat-life'},
+  share:{label:'分享',icon:'🔗',cls:'cat-share'},
+  discuss:{label:'讨论',icon:'💬',cls:'cat-discuss'},
+  other:{label:'其他',icon:'📌',cls:'cat-other'}
 };
 var COLORS=['#6366f1','#ec4899','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ef4444','#06b6d4'];
 
@@ -353,16 +349,19 @@ function closeModal(id){document.getElementById(id).classList.add('hidden');}
 function openHowTo(){document.getElementById('howto-modal').classList.remove('hidden');}
 
 function ghH(){return{'Authorization':'token '+cfg.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'};}
+
 function ghGet(p){
   return fetch(GH+p,{headers:ghH()}).then(function(r){
     return r.json().then(function(d){if(!r.ok)throw new Error(d.message||r.status);return d;});
   });
 }
+
 function ghPut(p,b){
   return fetch(GH+p,{method:'PUT',headers:ghH(),body:JSON.stringify(b)}).then(function(r){
     return r.json().then(function(d){if(!r.ok)throw new Error(d.message||r.status);return d;});
   });
 }
+
 function ghDel(p,b){
   return fetch(GH+p,{method:'DELETE',headers:ghH(),body:JSON.stringify(b)}).then(function(r){
     return r.json().then(function(d){if(!r.ok)throw new Error(d.message||r.status);return d;});
@@ -417,8 +416,8 @@ function loadPosts(showMsg){
       rs.forEach(function(r,i){
         if(r.status==='fulfilled'){
           try{
-            var d=JSON.parse(atob(r.value.content.replace(/
-/g,'')));
+            var content=r.value.content.replace(/\n/g,'');
+            var d=JSON.parse(atob(content));
             d._sha=r.value.sha;d._fn=tl[i].name;
             allPosts.push(d);
           }catch(e){}
@@ -443,7 +442,7 @@ function publishPost(){
   var cat=document.getElementById('w-cat').value;
   var author=document.getElementById('w-author').value.trim()||'匿名';
   var cover=document.getElementById('w-cover').value.trim();
-  var emoji=document.getElementById('w-emoji').value.trim()||'&#x1F4DD;';
+  var emoji=document.getElementById('w-emoji').value.trim()||'📝';
   var content=document.getElementById('w-content').value.trim();
   var tagsRaw=document.getElementById('w-tags').value.trim();
   if(!title){toast('请填写标题','err');return;}
@@ -458,8 +457,12 @@ function publishPost(){
   var obj={id:id,title:title,category:cat,author:author,date:now,cover:cover,emoji:emoji,content:content,excerpt:excerpt,tags:tags};
   showLoad('正在发布到 GitHub...');
   var b64;
-  try{b64=btoa(unescape(encodeURIComponent(JSON.stringify(obj,null,2))));}
-  catch(e){hideLoad();toast('内容编码失败','err');return;}
+  try{
+    var jsonStr=JSON.stringify(obj,null,2);
+    var encoded=encodeURIComponent(jsonStr);
+    var unescaped=unescape(encoded);
+    b64=btoa(unescaped);
+  }catch(e){hideLoad();toast('内容编码失败','err');return;}
   var body={message:'post: '+title+' by '+author,content:b64,branch:cfg.branch};
   if(editingPostId){
     var ex=allPosts.find(function(p){return p.id===editingPostId;});
@@ -502,19 +505,19 @@ function renderList(){
   if(sort==='oldest')posts=posts.slice().sort(function(a,b){return new Date(a.date)-new Date(b.date);});
   else if(sort==='author')posts=posts.slice().sort(function(a,b){return(a.author||'').localeCompare(b.author||'');});
   var ci=currentCat?CAT[currentCat]:null;
-  document.getElementById('view-title').textContent=(ci?ci.icon+' '+ci.label:'&#x1F3E0; 全部帖子');
+  document.getElementById('view-title').innerHTML=(ci?ci.icon+' '+ci.label:'🏠 全部帖子');
   var grid=document.getElementById('posts-grid');
   if(!posts.length){
-    grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">'+(ci?ci.icon:'&#x1F4F0;')+'</div><p>'+(q?'没有找到匹配的帖子':'暂无帖子，点击「写帖子」发布第一篇！')+'</p></div>';
+    grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">'+(ci?ci.icon:'📰')+'</div><p>'+(q?'没有找到匹配的帖子':'暂无帖子，点击「写帖子」发布第一篇！')+'</p></div>';
     return;
   }
   grid.innerHTML=posts.map(function(p){
     var c=CAT[p.category]||CAT.other;
     var col=aColor(p.author||'?');
     var ini=(p.author||'?')[0].toUpperCase();
-    return '<div class="post-card" onclick="showPost(''+p.id+'')">'+
-      '<div class="post-card-cover">'+(p.cover?'<img src="'+esc(p.cover)+'" onerror="this.style.display='none'"/>':'')+
-      '<span class="cover-emoji">'+(p.emoji||'&#x1F4DD;')+'</span></div>'+
+    return '<div class="post-card" onclick="showPost(\''+p.id+'\')">'+
+      '<div class="post-card-cover">'+(p.cover?'<img src="'+esc(p.cover)+'" onerror="this.style.display=\'none\'"/>':'')+
+      '<span class="cover-emoji">'+(p.emoji||'📝')+'</span></div>'+
       '<div class="post-card-body">'+
       '<span class="post-card-cat '+c.cls+'">'+c.icon+' '+c.label+'</span>'+
       '<div class="post-card-title">'+esc(p.title)+'</div>'+
@@ -539,15 +542,15 @@ function showPost(id){
     '<div class="post-detail-title">'+esc(p.title)+'</div>'+
     '<div class="post-detail-meta">'+
     '<div style="display:flex;align-items:center;gap:6px"><div class="avatar-sm" style="background:'+col+'">'+ini+'</div><strong>'+esc(p.author||'匿名')+'</strong></div>'+
-    '<span>&#x1F550; '+fmtDF(p.date)+'</span>'+
+    '<span>🕐 '+fmtDF(p.date)+'</span>'+
     (tags?'<div style="display:flex;gap:4px;flex-wrap:wrap">'+tags+'</div>':'')+
     '</div>'+
-    (p.cover?'<img class="post-detail-cover" src="'+esc(p.cover)+'" onerror="this.style.display='none'"/>':'')+
+    (p.cover?'<img class="post-detail-cover" src="'+esc(p.cover)+'" onerror="this.style.display=\'none\'"/>':'')+
     '<div class="post-detail-body">'+renderMD(p.content||'')+'</div>'+
     '<div class="post-detail-actions">'+
-    '<button class="btn btn-outline btn-sm" onclick="openEdit(''+p.id+'')">&#x270F;&#xFE0F; 编辑</button>'+
-    '<button class="btn btn-red btn-sm" onclick="deletePost(''+p.id+'')">&#x1F5D1; 删除</button>'+
-    '<button class="btn btn-outline btn-sm" onclick="showList()">&#x2190; 返回列表</button>'+
+    '<button class="btn btn-outline btn-sm" onclick="openEdit(\''+p.id+'\')">✏️ 编辑</button>'+
+    '<button class="btn btn-red btn-sm" onclick="deletePost(\''+p.id+'\')">🗑 删除</button>'+
+    '<button class="btn btn-outline btn-sm" onclick="showList()">← 返回列表</button>'+
     '</div>';
   document.getElementById('view-list').style.display='none';
   document.getElementById('view-post').style.display='block';
@@ -593,7 +596,7 @@ function previewPost(){
   document.getElementById('preview-content').innerHTML=
     '<span class="post-detail-cat '+ci.cls+'" style="margin-bottom:10px;display:inline-flex">'+ci.icon+' '+ci.label+'</span>'+
     '<div style="font-size:22px;font-weight:800;margin-bottom:10px">'+esc(title)+'</div>'+
-    '<div style="color:var(--muted);font-size:13px;margin-bottom:18px">&#x1F464; '+esc(author)+' &middot; '+fmtDF(new Date().toISOString())+'</div>'+
+    '<div style="color:var(--muted);font-size:13px;margin-bottom:18px">👤 '+esc(author)+' · '+fmtDF(new Date().toISOString())+'</div>'+
     '<div class="post-detail-body">'+renderMD(content)+'</div>';
   document.getElementById('preview-modal').classList.remove('hidden');
 }
@@ -666,7 +669,6 @@ function saveSetupModal(){
   connectGH();
 }
 
-// Auto-load on start
 (function(){
   try{
     var s=JSON.parse(localStorage.getItem('tb_cfg')||'{}');
