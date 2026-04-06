@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>TeamBlog</title>
+<title>TeamBlog - 协作博客平台</title>
 <style>
 :root{--primary:#2563eb;--pl:#eff6ff;--pd:#1d4ed8;--sbg:#0f172a;--st:#94a3b8;--sa:#38bdf8;--bg:#f1f5f9;--card:#fff;--bd:#e2e8f0;--tx:#1e293b;--mu:#64748b;--mu2:#94a3b8;--gn:#16a34a;--rd:#dc2626;--r:10px}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -148,24 +148,24 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
 <div id="sb">
   <div class="sb-top">
     <div class="sb-brand">
-      <span style="font-size:22px">&#x1F4F0;</span>
+      <span style="font-size:22px">📰</span>
       <div><div class="sb-bn">TeamBlog</div><div class="sb-bs">协作博客平台</div></div>
     </div>
   </div>
   <nav class="sb-nav">
     <div class="sb-sec">栏目</div>
-    <div class="sb-it on" id="cat-all" onclick="filterCat('')"><span class="ic">&#x1F3E0;</span>全部帖子<span class="sb-cn" id="cnt-all">0</span></div>
-    <div class="sb-it" id="cat-announce" onclick="filterCat('announce')"><span class="ic">&#x1F4E2;</span>公告<span class="sb-cn" id="cnt-announce">0</span></div>
-    <div class="sb-it" id="cat-tech" onclick="filterCat('tech')"><span class="ic">&#x1F4BB;</span>技术<span class="sb-cn" id="cnt-tech">0</span></div>
-    <div class="sb-it" id="cat-life" onclick="filterCat('life')"><span class="ic">&#x1F331;</span>生活<span class="sb-cn" id="cnt-life">0</span></div>
-    <div class="sb-it" id="cat-share" onclick="filterCat('share')"><span class="ic">&#x1F517;</span>分享<span class="sb-cn" id="cnt-share">0</span></div>
-    <div class="sb-it" id="cat-discuss" onclick="filterCat('discuss')"><span class="ic">&#x1F4AC;</span>讨论<span class="sb-cn" id="cnt-discuss">0</span></div>
-    <div class="sb-it" id="cat-other" onclick="filterCat('other')"><span class="ic">&#x1F4CC;</span>其他<span class="sb-cn" id="cnt-other">0</span></div>
+    <div class="sb-it on" id="cat-all" onclick="filterCat('')"><span class="ic">🏠</span>全部帖子<span class="sb-cn" id="cnt-all">0</span></div>
+    <div class="sb-it" id="cat-announce" onclick="filterCat('announce')"><span class="ic">📢</span>公告<span class="sb-cn" id="cnt-announce">0</span></div>
+    <div class="sb-it" id="cat-tech" onclick="filterCat('tech')"><span class="ic">💻</span>技术<span class="sb-cn" id="cnt-tech">0</span></div>
+    <div class="sb-it" id="cat-life" onclick="filterCat('life')"><span class="ic">🌱</span>生活<span class="sb-cn" id="cnt-life">0</span></div>
+    <div class="sb-it" id="cat-share" onclick="filterCat('share')"><span class="ic">🔗</span>分享<span class="sb-cn" id="cnt-share">0</span></div>
+    <div class="sb-it" id="cat-discuss" onclick="filterCat('discuss')"><span class="ic">💬</span>讨论<span class="sb-cn" id="cnt-discuss">0</span></div>
+    <div class="sb-it" id="cat-other" onclick="filterCat('other')"><span class="ic">📌</span>其他<span class="sb-cn" id="cnt-other">0</span></div>
     <div class="sb-sec" style="margin-top:8px">操作</div>
-    <div class="sb-it" onclick="openWrite()"><span class="ic">&#x270F;</span>写新帖子</div>
-    <div class="sb-it" onclick="loadPosts(true)"><span class="ic">&#x1F504;</span>刷新内容</div>
-    <div class="sb-it" onclick="openSetup()"><span class="ic">&#x2699;</span>GitHub 设置</div>
-    <div class="sb-it" onclick="openHowTo()"><span class="ic">&#x2753;</span>使用帮助</div>
+    <div class="sb-it" onclick="openWrite()"><span class="ic">✏</span>写新帖子</div>
+    <div class="sb-it" onclick="loadPosts(true)"><span class="ic">🔄</span>刷新内容</div>
+    <div class="sb-it" onclick="openSetup()"><span class="ic">⚙</span>GitHub 设置</div>
+    <div class="sb-it" onclick="openHowTo()"><span class="ic">❓</span>使用帮助</div>
   </nav>
   <div class="sb-ft">
     <div class="gh-p">
@@ -176,17 +176,17 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
 </div>
 <div id="main">
   <div id="topbar">
-    <button id="tsb" onclick="toggleSb()">&#9776;</button>
+    <button id="tsb" onclick="toggleSb()">☰</button>
     <div class="tbt" id="tb-title">TeamBlog 协作博客</div>
     <div class="tbr">
-      <button class="btn bo bs" onclick="loadPosts(true)">&#x1F504; 刷新</button>
-      <button class="btn bg bs" onclick="openWrite()">&#x270F; 写帖子</button>
-      <button class="btn bo bs" onclick="openSetup()">&#x2699; 设置</button>
+      <button class="btn bo bs" onclick="loadPosts(true)">🔄 刷新</button>
+      <button class="btn bg bs" onclick="openWrite()">✏ 写帖子</button>
+      <button class="btn bo bs" onclick="openSetup()">⚙ 设置</button>
     </div>
   </div>
   <div id="ct">
     <div id="setup">
-      <div class="st">&#x1F517; 连接 GitHub 仓库</div>
+      <div class="st">🔗 连接 GitHub 仓库</div>
       <div class="sd">帖子存储在 <code>posts/</code> 目录，每篇独立 JSON 文件，GitHub Pages 自动发布。</div>
       <div class="sg">
         <div class="sf"><label>GitHub 用户名</label><input id="cfg-owner" placeholder="your-username"/></div>
@@ -196,16 +196,16 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
         <div class="sf" style="grid-column:1/-1"><label>Personal Access Token</label><input id="cfg-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"/></div>
       </div>
       <div class="sa">
-        <button class="btn bg bs" onclick="connectGH()">&#x1F50C; 连接并加载帖子</button>
-        <button class="btn bs" style="background:transparent;border:1px solid #334155;color:#94a3b8" onclick="loadSavedCfg()">&#x21A9; 读取已保存配置</button>
-        <button class="btn bs" style="background:transparent;border:1px solid #334155;color:#94a3b8" onclick="openHowTo()">&#x2753; 帮助</button>
+        <button class="btn bg bs" onclick="connectGH()">🔌 连接并加载帖子</button>
+        <button class="btn bs" style="background:transparent;border:1px solid #334155;color:#94a3b8" onclick="loadSavedCfg()">↩ 读取已保存配置</button>
+        <button class="btn bs" style="background:transparent;border:1px solid #334155;color:#94a3b8" onclick="openHowTo()">❓ 帮助</button>
       </div>
     </div>
     <div id="vl">
       <div class="vh">
-        <h2 id="v-title">&#x1F3E0; 全部帖子</h2>
+        <h2 id="v-title">🏠 全部帖子</h2>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <input class="si" id="s-inp" placeholder="&#x1F50D; 搜索帖子..." oninput="renderList()" style="width:180px"/>
+          <input class="si" id="s-inp" placeholder="🔍 搜索帖子..." oninput="renderList()" style="width:180px"/>
           <select class="si" id="s-sort" onchange="renderList()" style="width:auto">
             <option value="newest">最新优先</option>
             <option value="oldest">最旧优先</option>
@@ -214,31 +214,30 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
         </div>
       </div>
       <div class="pg" id="pg">
-        <div class="es" style="grid-column:1/-1"><div class="ei">&#x1F4F0;</div><p>请先连接 GitHub 仓库<br/>或点击「写帖子」发布第一篇内容</p></div>
+        <div class="es" style="grid-column:1/-1"><div class="ei">📰</div><p>请先连接 GitHub 仓库<br/>或点击「写帖子」发布第一篇内容</p></div>
       </div>
     </div>
     <div id="vp">
-      <div class="pb" onclick="showList()">&#x2190; 返回列表</div>
+      <div class="pb" onclick="showList()">← 返回列表</div>
       <div id="pd"></div>
     </div>
   </div>
 </div>
 
-<!-- Write Modal -->
 <div class="ov h" id="wm">
   <div class="mo mo-lg">
-    <div class="mo-hd"><h3 id="wm-title">&#x270F; 写新帖子</h3><button class="mc" onclick="closeM('wm')">&#x2715;</button></div>
+    <div class="mo-hd"><h3 id="wm-title">✏ 写新帖子</h3><button class="mc" onclick="closeM('wm')">✕</button></div>
     <div class="mo-bd">
       <div class="fg-row">
         <div class="fg"><label>帖子标题 *</label><input id="w-ti" placeholder="输入标题..."/></div>
         <div class="fg"><label>栏目分类 *</label>
           <select id="w-cat">
-            <option value="announce">&#x1F4E2; 公告</option>
-            <option value="tech">&#x1F4BB; 技术</option>
-            <option value="life">&#x1F331; 生活</option>
-            <option value="share">&#x1F517; 分享</option>
-            <option value="discuss">&#x1F4AC; 讨论</option>
-            <option value="other">&#x1F4CC; 其他</option>
+            <option value="announce">📢 公告</option>
+            <option value="tech">💻 技术</option>
+            <option value="life">🌱 生活</option>
+            <option value="share">🔗 分享</option>
+            <option value="discuss">💬 讨论</option>
+            <option value="other">📌 其他</option>
           </select>
         </div>
       </div>
@@ -247,41 +246,40 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
         <div class="fg"><label>封面图片 URL（可选）</label><input id="w-cv" placeholder="https://..."/></div>
       </div>
       <div class="fg-row">
-        <div class="fg"><label>封面 Emoji</label><input id="w-em" placeholder="&#x1F4DD;" maxlength="4" style="width:80px"/></div>
+        <div class="fg"><label>封面 Emoji</label><input id="w-em" placeholder="📝" maxlength="4" style="width:80px"/></div>
         <div class="fg"><label>标签（逗号分隔）</label><input id="w-tg" placeholder="标签1, 标签2"/></div>
       </div>
       <div class="fg">
-        <label>&#x1F4D3; 导入 Notebook（可选）</label>
+        <label>📓 导入 Notebook（可选）</label>
         <div class="nb-ia" id="nb-dz" ondragover="nbDragOver(event)" ondragleave="nbDragLeave(event)" ondrop="nbDrop(event)">
           <input type="file" accept=".ipynb" id="nb-fi" onchange="nbFileSelect(event)"/>
-          <div style="font-size:32px;margin-bottom:8px">&#x1F4D3;</div>
+          <div style="font-size:32px;margin-bottom:8px">📓</div>
           <div style="font-size:14px;font-weight:600;margin-bottom:4px">拖拽 .ipynb 文件到此处，或点击选择</div>
-          <div style="font-size:12px;color:var(--mu)">自动提取标题 · 完整保留代码输出和图表（Base64内嵌，完全离线）</div>
+          <div style="font-size:12px;color:var(--mu)">自动提取标题 · 完整保留代码输出和图表</div>
         </div>
         <div id="nb-info" style="display:none" class="nb-ii">
-          &#x2705; <span id="nb-name"></span>
-          <button class="btn bo bs" style="margin-left:auto;padding:2px 8px;font-size:11px" onclick="clearNb()">&#x2715; 清除</button>
+          ✅ <span id="nb-name"></span>
+          <button class="btn bo bs" style="margin-left:auto;padding:2px 8px;font-size:11px" onclick="clearNb()">✕ 清除</button>
         </div>
       </div>
       <div class="fg">
         <label>帖子内容 *</label>
         <div class="wtb" id="wtb"></div>
-        <textarea id="w-co" rows="14" placeholder="在这里写内容...支持 Markdown&#10;导入 .ipynb 后此处自动填充内容"></textarea>
-        <div class="hint">支持 Markdown：**粗体** *斜体* ## 标题 - 列表 &gt; 引用 `代码`</div>
+        <textarea id="w-co" rows="14" placeholder="在这里写内容...支持 Markdown"></textarea>
+        <div class="hint">支持 Markdown：**粗体** *斜体* ## 标题 - 列表 > 引用 `代码`</div>
       </div>
     </div>
     <div class="mo-ft">
       <button class="btn bo" onclick="closeM('wm')">取消</button>
-      <button class="btn bo bs" onclick="previewPost()">&#x1F441; 预览</button>
-      <button class="btn bg" onclick="publishPost()">&#x1F680; 发布到 GitHub</button>
+      <button class="btn bo bs" onclick="previewPost()">👁 预览</button>
+      <button class="btn bg" onclick="publishPost()">🚀 发布到 GitHub</button>
     </div>
   </div>
 </div>
 
-<!-- Setup Modal -->
 <div class="ov h" id="sm">
   <div class="mo" style="max-width:520px">
-    <div class="mo-hd"><h3>&#x2699; GitHub 设置</h3><button class="mc" onclick="closeM('sm')">&#x2715;</button></div>
+    <div class="mo-hd"><h3>⚙ GitHub 设置</h3><button class="mc" onclick="closeM('sm')">✕</button></div>
     <div class="mo-bd">
       <div class="fg"><label>GitHub 用户名</label><input id="sm-owner"/></div>
       <div class="fg"><label>仓库名称</label><input id="sm-repo"/></div>
@@ -291,37 +289,18 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
     </div>
     <div class="mo-ft">
       <button class="btn bo" onclick="closeM('sm')">取消</button>
-      <button class="btn bg" onclick="saveSetup()">&#x1F4BE; 保存并重新连接</button>
+      <button class="btn bg" onclick="saveSetup()">💾 保存并重新连接</button>
     </div>
   </div>
 </div>
 
-<!-- HowTo Modal -->
-<div class="ov h" id="hm">
-  <div class="mo" style="max-width:560px">
-    <div class="mo-hd"><h3>&#x1F4D6; 使用帮助</h3><button class="mc" onclick="closeM('hm')">&#x2715;</button></div>
-    <div class="mo-bd">
-      <p style="font-size:13px;color:var(--mu);margin-bottom:16px">TeamBlog 将帖子存储在 GitHub 仓库的 <code>posts/</code> 目录，通过 GitHub Pages 免费发布。</p>
-      <div class="hs"><div class="hn">1</div><div class="ht">创建 <strong>Public</strong> 仓库，开启 <strong>GitHub Pages</strong>（Settings → Pages → Deploy from branch → main）</div></div>
-      <div class="hs"><div class="hn">2</div><div class="ht">将本 HTML 文件命名为 <code>index.html</code> 上传到仓库根目录</div></div>
-      <div class="hs"><div class="hn">3</div><div class="ht">获取 Token：GitHub → Settings → Developer settings → Personal access tokens → 勾选 <code>repo</code> 权限</div></div>
-      <div class="hs"><div class="hn">4</div><div class="ht">填入配置点击「连接」，连接成功后配置栏自动隐藏</div></div>
-      <div class="hs"><div class="hn">5</div><div class="ht">点击「写帖子」发布，约 <strong>1 分钟</strong>后 GitHub Pages 自动更新</div></div>
-      <div class="hs"><div class="hn">6</div><div class="ht">支持导入 <strong>.ipynb</strong>：写帖子时拖入文件，自动提取标题，完整保留代码输出和图表（Base64内嵌，完全离线）</div></div>
-      <div style="background:#fef9c3;border:1px solid #fde047;border-radius:8px;padding:12px;font-size:12px;margin-top:8px">&#x1F4A1; Token 仅存本地浏览器，不会上传。多人同时发帖不会冲突。</div>
-    </div>
-    <div class="mo-ft"><button class="btn bp" onclick="closeM('hm')">明白了</button></div>
-  </div>
-</div>
-
-<!-- Preview Modal -->
 <div class="ov h" id="pm">
   <div class="mo mo-lg">
-    <div class="mo-hd"><h3>&#x1F441; 帖子预览</h3><button class="mc" onclick="closeM('pm')">&#x2715;</button></div>
+    <div class="mo-hd"><h3>👁 帖子预览</h3><button class="mc" onclick="closeM('pm')">✕</button></div>
     <div class="mo-bd" id="pm-bd"></div>
     <div class="mo-ft">
       <button class="btn bo" onclick="closeM('pm')">关闭</button>
-      <button class="btn bg" onclick="closeM('pm');publishPost()">&#x1F680; 确认发布</button>
+      <button class="btn bg" onclick="closeM('pm');publishPost()">🚀 确认发布</button>
     </div>
   </div>
 </div>
@@ -342,7 +321,24 @@ var CAT={
 };
 var COLORS=['#6366f1','#ec4899','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ef4444','#06b6d4'];
 
-// Init toolbar
+// 1. Markdown 渲染器补全
+function renderMD(md) {
+  if(!md) return '';
+  return md
+    .replace(/### (.*)/g, '<h3>$1</h3>')
+    .replace(/## (.*)/g, '<h2>$1</h2>')
+    .replace(/# (.*)/g, '<h1>$1</h1>')
+    .replace(/\*\*(.*)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*)\*/g, '<em>$1</em>')
+    .replace(/`(.*?)`/g, '<code>$1</code>')
+    .replace(/\n- (.*)/g, '<li>$1</li>')
+    .replace(/\n> (.*)/g, '<blockquote>$1</blockquote>')
+    .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1">')
+    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
+    .replace(/\n/g, '<br>');
+}
+
+// 2. 初始化工具栏
 (function(){
   var tb=document.getElementById('wtb');
   var btns=[['**','**','B'],['*','*','I'],['## ','','H2'],['### ','','H3'],['\n- ','','列表'],['\n> ','','引用'],['`','`','代码'],['\n```\n','\n```','代码块'],['![图片](','）','图片'],['[链接](','）','链接']];
@@ -350,7 +346,7 @@ var COLORS=['#6366f1','#ec4899','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ef4444
     var el=document.createElement('button');
     el.className='tb-btn';
     el.textContent=b[2];
-    el.addEventListener('click',function(){insertMd(b[0],b[1]);});
+    el.onclick=function(){insertMd(b[0],b[1]);};
     tb.appendChild(el);
   });
 })();
@@ -366,7 +362,6 @@ function toast(m,t){var e=document.getElementById('toast');e.textContent=m;e.cla
 function setSt(on,lbl){document.getElementById('dot-st').className='dot'+(on?' on':'');document.getElementById('txt-st').textContent=lbl||'未连接';}
 function toggleSb(){document.getElementById('sb').classList.toggle('col');}
 function closeM(id){document.getElementById(id).classList.add('h');}
-function openHowTo(){document.getElementById('hm').classList.remove('h');}
 function openSetup(){
   document.getElementById('sm-owner').value=cfg.owner||'';
   document.getElementById('sm-repo').value=cfg.repo||'';
@@ -383,14 +378,7 @@ function saveSetup(){
   cfg.token=document.getElementById('sm-token').value.trim();
   localStorage.setItem('tb_cfg',JSON.stringify(cfg));
   closeM('sm');
-  if(cfg.owner&&cfg.repo&&cfg.token){
-    document.getElementById('cfg-owner').value=cfg.owner;
-    document.getElementById('cfg-repo').value=cfg.repo;
-    document.getElementById('cfg-branch').value=cfg.branch;
-    document.getElementById('cfg-title').value=cfg.title;
-    document.getElementById('cfg-token').value=cfg.token;
-    connectGH();
-  }
+  if(cfg.owner&&cfg.repo&&cfg.token) connectGH();
 }
 function insertMd(a,b){
   var ta=document.getElementById('w-co');
@@ -402,18 +390,17 @@ function insertMd(a,b){
   ta.focus();
 }
 
-// GitHub API
+// GitHub API 辅助
 function ghH(){return{'Authorization':'token '+cfg.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'};}
-function ghGet(p){return fetch(GH+p,{headers:ghH()}).then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.message||r.status);return d;});});}
-function ghPut(p,b){return fetch(GH+p,{method:'PUT',headers:ghH(),body:JSON.stringify(b)}).then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.message||r.status);return d;});});}
-function ghDel(p,b){return fetch(GH+p,{method:'DELETE',headers:ghH(),body:JSON.stringify(b)}).then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.message||r.status);return d;});});}
-
-function b64dec(s){try{return decodeURIComponent(escape(atob(s.replace(/\n/g,''))));}catch(e){try{return atob(s.replace(/\n/g,''));}catch(e2){return '';}}}
+function ghGet(p){return fetch(GH+p,{headers:ghH()}).then(r=>{if(!r.ok)throw r;return r.json();});}
+function ghPut(p,b){return fetch(GH+p,{method:'PUT',headers:ghH(),body:JSON.stringify(b)}).then(r=>{if(!r.ok)throw r;return r.json();});}
+function ghDel(p,b){return fetch(GH+p,{method:'DELETE',headers:ghH(),body:JSON.stringify(b)}).then(r=>{if(!r.ok)throw r;return r.json();});}
+function b64dec(s){try{return decodeURIComponent(escape(atob(s.replace(/\n/g,''))));}catch(e){return atob(s.replace(/\n/g,''));}}
 function b64enc(s){return btoa(unescape(encodeURIComponent(s)));}
 
-// ===== ipynb =====
+// ===== ipynb 解析 =====
 function parseNb(nb){
-  var cells=nb.cells||(nb.worksheets&&nb.worksheets[0]&&nb.worksheets[0].cells)||[];
+  var cells=nb.cells||[];
   var title='',nbCells=[];
   cells.forEach(function(cell){
     var ct=cell.cell_type;
@@ -422,21 +409,16 @@ function parseNb(nb){
       if(!title){var m=src.match(/^#\s+(.+)/m);if(m)title=m[1].trim();}
       nbCells.push({type:'markdown',src:src});
     } else if(ct==='code'){
-      var ec=cell.execution_count!=null?cell.execution_count:(cell.prompt_number!=null?cell.prompt_number:'');
+      var ec=cell.execution_count||'';
       var outs=[];
       (cell.outputs||[]).forEach(function(out){
         var ot=out.output_type;
         if(ot==='display_data'||ot==='execute_result'){
           var d=out.data||{};
-          if(d['image/png']){outs.push({kind:'image',data:(Array.isArray(d['image/png'])?d['image/png'].join(''):d['image/png']).replace(/\n/g,'')});}
-          else if(d['text/html']){outs.push({kind:'html',data:Array.isArray(d['text/html'])?d['text/html'].join(''):d['text/html']});}
-          else if(d['text/plain']){outs.push({kind:'text',data:Array.isArray(d['text/plain'])?d['text/plain'].join(''):d['text/plain']});}
-        } else if(ot==='stream'){
-          outs.push({kind:'stream',data:Array.isArray(out.text)?out.text.join(''):(out.text||'')});
-        } else if(ot==='error'){
-          var tb=(out.traceback||[]).join('\n').replace(/\x1b\[[0-9;]*m/g,'');
-          outs.push({kind:'error',data:(out.ename||'Error')+': '+(out.evalue||'')+'\n'+tb});
-        }
+          if(d['image/png']) outs.push({kind:'image',data:d['image/png']});
+          else if(d['text/html']) outs.push({kind:'html',data:d['text/html']});
+          else if(d['text/plain']) outs.push({kind:'text',data:d['text/plain']});
+        } else if(ot==='stream') outs.push({kind:'stream',data:out.text});
       });
       nbCells.push({type:'code',src:src,ec:ec,outputs:outs});
     }
@@ -445,212 +427,212 @@ function parseNb(nb){
 }
 
 function renderNbCells(nbCells){
-  if(!nbCells||!nbCells.length)return '';
-  var h='<div class="nb-ban"><span style="font-size:20px">&#x1F4D3;</span><span>Jupyter Notebook &middot; 以下内容由 .ipynb 文件生成</span></div>';
+  if(!nbCells) return '';
+  var h='<div class="nb-ban">📓 Jupyter Notebook 内容</div>';
   nbCells.forEach(function(cell){
-    if(cell.type==='markdown'){h+='<div class="nb-cell nb-md">'+renderMD(cell.src)+'</div>';}
+    if(cell.type==='markdown') h+='<div class="nb-cell nb-md">'+renderMD(cell.src)+'</div>';
     else if(cell.type==='code'){
-      var il=cell.ec!=null&&cell.ec!==''?'In ['+cell.ec+']:':'In [ ]:';
-      h+='<div class="nb-cell nb-cw"><div class="nb-in"><div class="nb-il">'+esc(il)+'</div><pre class="nb-ic"><code>'+esc(cell.src)+'</code></pre></div>';
-      if(cell.outputs&&cell.outputs.length){
-        cell.outputs.forEach(function(out,oi){
-          var ol=oi===0?(cell.ec!=null&&cell.ec!==''?'Out['+cell.ec+']:':'Out[ ]:'):'';
-          h+='<div class="nb-out"><div class="nb-ol">'+esc(ol)+'</div><div class="nb-ob">';
-          if(out.kind==='image')h+='<img src="data:image/png;base64,'+out.data+'" alt="output"/>';
-          else if(out.kind==='html')h+=out.data;
-          else if(out.kind==='text')h+='<pre style="margin:0;font-size:12px;font-family:monospace;white-space:pre-wrap">'+esc(out.data)+'</pre>';
-          else if(out.kind==='stream')h+='<pre class="nb-str">'+esc(out.data)+'</pre>';
-          else if(out.kind==='error')h+='<pre class="nb-err">'+esc(out.data)+'</pre>';
-          h+='</div></div>';
-        });
-      }
+      h+='<div class="nb-cell nb-cw"><div class="nb-in"><div class="nb-il">In ['+cell.ec+']</div><pre class="nb-ic"><code>'+esc(cell.src)+'</code></pre></div>';
+      (cell.outputs||[]).forEach(function(out){
+        h+='<div class="nb-out"><div class="nb-ol">Out</div><div class="nb-ob">';
+        if(out.kind==='image') h+='<img src="data:image/png;base64,'+(Array.isArray(out.data)?out.data.join(''):out.data)+'">';
+        else if(out.kind==='html') h+= (Array.isArray(out.data)?out.data.join(''):out.data);
+        else h+='<pre>'+esc(Array.isArray(out.data)?out.data.join(''):out.data)+'</pre>';
+        h+='</div></div>';
+      });
       h+='</div>';
     }
   });
   return h;
 }
 
-function nbToMd(nbCells){
-  return nbCells.map(function(cell){
-    if(cell.type==='markdown')return cell.src;
-    if(cell.type==='code'){
-      var o='\n```python\n'+cell.src+'\n```\n';
-      (cell.outputs||[]).forEach(function(out){
-        if(out.kind==='text'||out.kind==='stream')o+='\n> 输出：\n> ```\n> '+out.data.replace(/\n/g,'\n> ')+'\n> ```\n';
-        else if(out.kind==='image')o+='\n> 📊 *[图表输出]*\n';
-        else if(out.kind==='error')o+='\n> ❌ *[错误输出]*\n';
-      });
-      return o;
-    }
-    return '';
-  }).join('\n\n');
-}
-
-function nbFileSelect(e){var f=e.target.files&&e.target.files[0];if(f)loadNbFile(f);}
+function nbFileSelect(e){var f=e.target.files[0];if(f)loadNbFile(f);}
 function nbDragOver(e){e.preventDefault();document.getElementById('nb-dz').classList.add('dov');}
 function nbDragLeave(){document.getElementById('nb-dz').classList.remove('dov');}
-function nbDrop(e){
-  e.preventDefault();document.getElementById('nb-dz').classList.remove('dov');
-  var f=e.dataTransfer.files&&e.dataTransfer.files[0];
-  if(f&&f.name.endsWith('.ipynb'))loadNbFile(f);else toast('请选择 .ipynb 文件','err');
-}
+function nbDrop(e){e.preventDefault();nbDragLeave();var f=e.dataTransfer.files[0];if(f)loadNbFile(f);}
 function loadNbFile(file){
   var reader=new FileReader();
   reader.onload=function(ev){
     try{
       var nb=JSON.parse(ev.target.result);
       var parsed=parseNb(nb);
-      nbData={nbCells:parsed.nbCells,filename:file.name};
-      if(parsed.title&&!document.getElementById('w-ti').value.trim())document.getElementById('w-ti').value=parsed.title;
-      if(!document.getElementById('w-em').value.trim())document.getElementById('w-em').value='📓';
-      document.getElementById('w-co').value=nbToMd(parsed.nbCells);
-      document.getElementById('nb-name').textContent=file.name+' ('+parsed.nbCells.length+' 个 cell)';
+      nbData={nbCells:parsed.nbCells};
+      document.getElementById('w-ti').value=parsed.title||file.name;
+      document.getElementById('nb-name').textContent=file.name;
       document.getElementById('nb-info').style.display='flex';
-      toast('Notebook 导入成功，共 '+parsed.nbCells.length+' 个 cell','ok');
-    }catch(err){toast('解析 .ipynb 失败：'+err.message,'err');}
+      toast('Notebook 导入成功','ok');
+    }catch(err){toast('解析失败','err');}
   };
   reader.readAsText(file);
 }
-function clearNb(){
-  nbData=null;
-  document.getElementById('nb-info').style.display='none';
-  document.getElementById('nb-fi').value='';
-  document.getElementById('w-co').value='';
-  toast('已清除 Notebook 导入');
+function clearNb(){nbData=null;document.getElementById('nb-info').style.display='none';}
+
+// ===== 列表显示逻辑补全 =====
+function renderList() {
+  var q = document.getElementById('s-inp').value.toLowerCase();
+  var sort = document.getElementById('s-sort').value;
+  var container = document.getElementById('pg');
+  
+  var filtered = allPosts.filter(function(p) {
+    var matchSearch = p.title.toLowerCase().includes(q) || p.author.toLowerCase().includes(q);
+    var matchCat = !curCat || p.category === curCat;
+    return matchSearch && matchCat;
+  });
+
+  if (sort === 'oldest') filtered.sort((a,b) => new Date(a.date) - new Date(b.date));
+  else if (sort === 'author') filtered.sort((a,b) => a.author.localeCompare(b.author));
+  else filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="es" style="grid-column:1/-1"><div class="ei">🔍</div><p>未找到相关帖子</p></div>';
+    return;
+  }
+
+  container.innerHTML = filtered.map(function(p) {
+    var c = CAT[p.category] || CAT.other;
+    var ac = aColor(p.author);
+    return '<div class="pc" onclick="showPost(\'' + p.id + '\')">' +
+      '<div class="pc-cv">' + (p.cover ? '<img src="' + p.cover + '">' : '') + '<span class="ce">' + (p.emoji || '📄') + '</span></div>' +
+      '<div class="pc-bd">' +
+      '<span class="pc-cat ' + c.cls + '">' + c.icon + ' ' + c.label + '</span>' +
+      '<div class="pc-ti">' + esc(p.title) + '</div>' +
+      '<div class="pc-ex">' + esc(p.excerpt) + '</div>' +
+      '<div class="pc-ft">' +
+      '<div class="av" style="background:' + ac + '">' + p.author[0].toUpperCase() + '</div>' +
+      '<div class="pc-au">' + esc(p.author) + '</div>' +
+      '<div class="pc-dt">' + fmtD(p.date) + '</div>' +
+      '</div></div></div>';
+  }).join('');
 }
 
-// ===== Config =====
-function loadSavedCfg(){
-  try{
-    var s=JSON.parse(localStorage.getItem('tb_cfg')||'{}');
-    ['owner','repo','branch','token','title'].forEach(function(k){if(s[k])document.getElementById('cfg-'+k).value=s[k];});
-    toast('已读取保存的配置');
-  }catch(e){toast('读取失败','err');}
+function showPost(id) {
+  var p = allPosts.find(function(x) { return x.id === id; });
+  if (!p) return;
+  var c = CAT[p.category] || CAT.other;
+  var h = '<h1 class="pd-ti">' + esc(p.title) + '</h1>';
+  h += '<div class="pd-me"><span>👤 ' + esc(p.author) + '</span><span>📅 ' + fmtDF(p.date) + '</span><span class="pc-cat '+c.cls+'">'+c.icon+' '+c.label+'</span></div>';
+  if (p.cover) h += '<img src="' + p.cover + '" class="pd-cv" onerror="this.style.display=\'none\'"/>';
+  
+  if (p.isNotebook && p.nbCells) h += renderNbCells(p.nbCells);
+  else h += '<div class="pd-bd">' + renderMD(p.content) + '</div>';
+  
+  h += '<div class="pd-ac">';
+  h += '<button class="btn bo bs" onclick="editPost(\'' + p.id + '\')">✏ 编辑</button>';
+  h += '<button class="btn bo bs" style="color:var(--rd)" onclick="deletePost(\'' + p.id + '\')">🗑 删除</button>';
+  h += '</div>';
+  
+  document.getElementById('pd').innerHTML = h;
+  document.getElementById('vl').style.display = 'none';
+  document.getElementById('vp').style.display = 'block';
+  document.getElementById('vp').scrollTop = 0;
 }
-function readCfg(){
+
+function showList() {
+  document.getElementById('vp').style.display = 'none';
+  document.getElementById('vl').style.display = 'flex';
+}
+
+function filterCat(cat) {
+  curCat = cat;
+  document.querySelectorAll('.sb-it').forEach(el => el.classList.remove('on'));
+  document.getElementById('cat-' + (cat || 'all')).classList.add('on');
+  showList(); renderList();
+}
+
+function updateCounts() {
+  document.getElementById('cnt-all').textContent = allPosts.length;
+  Object.keys(CAT).forEach(k => {
+    var n = allPosts.filter(p => p.category === k).length;
+    if(document.getElementById('cnt-'+k)) document.getElementById('cnt-'+k).textContent = n;
+  });
+}
+
+// ===== 发帖/连接逻辑 =====
+function connectGH(){
   cfg.owner=document.getElementById('cfg-owner').value.trim();
   cfg.repo=document.getElementById('cfg-repo').value.trim();
   cfg.branch=document.getElementById('cfg-branch').value.trim()||'main';
   cfg.token=document.getElementById('cfg-token').value.trim();
   cfg.title=document.getElementById('cfg-title').value.trim()||'TeamBlog';
-}
-function connectGH(){
-  readCfg();
-  if(!cfg.owner||!cfg.repo||!cfg.token){toast('请填写完整配置','err');return;}
-  showLoad('正在连接 GitHub...');
-  ghGet('/repos/'+cfg.owner+'/'+cfg.repo).then(function(){
+  if(!cfg.owner||!cfg.token){toast('请完善配置','err');return;}
+  showLoad('正在验证...');
+  ghGet('/repos/'+cfg.owner+'/'+cfg.repo).then(()=>{
     localStorage.setItem('tb_cfg',JSON.stringify(cfg));
-    setSt(true,'已连接 '+cfg.owner);
-    document.getElementById('txt-repo').textContent=cfg.owner+'/'+cfg.repo;
-    document.getElementById('tb-title').textContent=cfg.title;
+    setSt(true,cfg.owner);
     document.getElementById('setup').classList.add('h');
-    return loadPosts(false);
-  }).then(function(){hideLoad();toast('连接成功，帖子已加载','ok');})
-  .catch(function(e){hideLoad();toast('连接失败：'+e.message,'err');});
+    loadPosts(true);
+  }).catch(e=>toast('连接失败','err'));
 }
 
-// ===== Posts =====
-function loadPosts(showMsg){
-  if(!cfg.token){toast('请先连接 GitHub','err');return Promise.resolve();}
-  if(showMsg)showLoad('正在加载帖子...');
-  return ghGet('/repos/'+cfg.owner+'/'+cfg.repo+'/contents/posts?ref='+cfg.branch).then(function(files){
-    var jf=(Array.isArray(files)?files:[]).filter(function(f){return f.name.endsWith('.json')&&f.name!=='index.json';}).slice(0,60);
-    return Promise.allSettled(jf.map(function(f){return ghGet('/repos/'+cfg.owner+'/'+cfg.repo+'/contents/posts/'+f.name+'?ref='+cfg.branch);})).then(function(rs){
-      allPosts=[];
-      rs.forEach(function(r,i){
-        if(r.status==='fulfilled'){try{var d=JSON.parse(b64dec(r.value.content));d._sha=r.value.sha;d._fn=jf[i].name;allPosts.push(d);}catch(e){}}
-      });
-      allPosts.sort(function(a,b){return new Date(b.date)-new Date(a.date);});
-      renderList();updateCounts();
-      if(showMsg){hideLoad();toast('已加载 '+allPosts.length+' 篇帖子','ok');}
+function loadPosts(msg){
+  if(msg) showLoad();
+  ghGet('/repos/'+cfg.owner+'/'+cfg.repo+'/contents/posts?ref='+cfg.branch).then(files=>{
+    var list = Array.isArray(files)?files.filter(f=>f.name.endsWith('.json')):[];
+    return Promise.all(list.map(f=>ghGet('/repos/'+cfg.owner+'/'+cfg.repo+'/contents/posts/'+f.name+'?ref='+cfg.branch)));
+  }).then(datas=>{
+    allPosts = datas.map(d=>{
+      var p = JSON.parse(b64dec(d.content));
+      p._sha = d.sha; p._fn = d.name; return p;
     });
-  }).catch(function(e){
-    if(e.message&&e.message.indexOf('Not Found')>=0){allPosts=[];renderList();updateCounts();if(showMsg){hideLoad();toast('posts/ 目录不存在，发布第一篇后自动创建');}return;}
-    if(showMsg){hideLoad();toast('加载失败：'+e.message,'err');}
-  });
-}
-
-function openWrite(){
-  editId=null;nbData=null;
-  document.getElementById('wm-title').textContent='✏ 写新帖子';
-  document.getElementById('w-ti').value='';
-  document.getElementById('w-au').value=localStorage.getItem('tb_author')||'';
-  document.getElementById('w-cv').value='';
-  document.getElementById('w-em').value='';
-  document.getElementById('w-tg').value='';
-  document.getElementById('w-co').value='';
-  document.getElementById('w-cat').value='tech';
-  document.getElementById('nb-info').style.display='none';
-  document.getElementById('nb-fi').value='';
-  document.getElementById('wm').classList.remove('h');
+    renderList(); updateCounts(); hideLoad();
+  }).catch(e=>{ hideLoad(); });
 }
 
 function publishPost(){
-  var title=document.getElementById('w-ti').value.trim();
-  var cat=document.getElementById('w-cat').value;
-  var author=document.getElementById('w-au').value.trim()||'匿名';
-  var cover=document.getElementById('w-cv').value.trim();
-  var emoji=document.getElementById('w-em').value.trim()||'📝';
-  var content=document.getElementById('w-co').value.trim();
-  var tagsRaw=document.getElementById('w-tg').value.trim();
-  if(!title){toast('请填写标题','err');return;}
-  if(!content){toast('请填写内容','err');return;}
-  if(!cfg.token){toast('请先连接 GitHub','err');return;}
-  localStorage.setItem('tb_author',author);
-  var tags=tagsRaw?tagsRaw.split(',').map(function(t){return t.trim();}).filter(Boolean):[];
-  var now=new Date().toISOString();
-  var id=editId||('post-'+Date.now());
-  var fn=id+'.json';
-  var excerpt=content.replace(/[#*`>\[\]!]/g,'').slice(0,120)+'...';
-  var obj={id:id,title:title,category:cat,author:author,date:now,cover:cover,emoji:emoji,content:content,excerpt:excerpt,tags:tags};
-  if(nbData&&nbData.nbCells&&nbData.nbCells.length){obj.nbCells=nbData.nbCells;obj.isNotebook=true;}
-  showLoad('正在发布到 GitHub...');
-  var b64;
-  try{b64=b64enc(JSON.stringify(obj,null,2));}catch(e){hideLoad();toast('内容编码失败','err');return;}
-  var body={message:'post: '+title+' by '+author,content:b64,branch:cfg.branch};
-  if(editId){var ex=allPosts.find(function(p){return p.id===editId;});if(ex&&ex._sha)body.sha=ex._sha;}
-  ghPut('/repos/'+cfg.owner+'/'+cfg.repo+'/contents/posts/'+fn,body).then(function(res){
-    obj._sha=res.content.sha;obj._fn=fn;
-    var idx=allPosts.findIndex(function(p){return p.id===id;});
-    if(idx>=0)allPosts[idx]=obj;else allPosts.unshift(obj);
-    allPosts.sort(function(a,b){return new Date(b.date)-new Date(a.date);});
-    renderList();updateCounts();closeM('wm');editId=null;nbData=null;
-    hideLoad();toast('发布成功！约1分钟后 Pages 更新','ok');showPost(id);
-  }).catch(function(e){hideLoad();toast('发布失败：'+e.message,'err');});
+  var ti=document.getElementById('w-ti').value;
+  var co=document.getElementById('w-co').value;
+  if(!ti||!co){toast('标题和内容必填','err');return;}
+  var id = editId || 'post-'+Date.now();
+  var obj = {
+    id:id, title:ti, author:document.getElementById('w-au').value||'匿名',
+    category:document.getElementById('w-cat').value, date:new Date().toISOString(),
+    content:co, excerpt:co.substring(0,100), emoji:document.getElementById('w-em').value||'📝',
+    cover:document.getElementById('w-cv').value, isNotebook:!!nbData, nbCells:nbData?nbData.nbCells:null
+  };
+  showLoad('发布中...');
+  var body = {message:'update post', content:b64enc(JSON.stringify(obj)), branch:cfg.branch};
+  if(editId){
+    var old = allPosts.find(p=>p.id===editId);
+    if(old) body.sha = old._sha;
+  }
+  ghPut('/repos/'+cfg.owner+'/'+cfg.repo+'/contents/posts/'+id+'.json', body).then(()=>{
+    toast('发布成功','ok'); closeM('wm'); loadPosts(false);
+  }).catch(e=>toast('发布失败','err'));
 }
 
 function deletePost(id){
-  if(!confirm('确定删除这篇帖子？此操作不可撤销。'))return;
-  var post=allPosts.find(function(p){return p.id===id;});
-  if(!post||!post._sha){toast('找不到帖子信息','err');return;}
-  showLoad('正在删除...');
-  ghDel('/repos/'+cfg.owner+'/'+cfg.repo+'/contents/posts/'+post._fn,{message:'delete: '+post.title,sha:post._sha,branch:cfg.branch}).then(function(){
-    allPosts=allPosts.filter(function(p){return p.id!==id;});
-    renderList();updateCounts();showList();hideLoad();toast('帖子已删除','ok');
-  }).catch(function(e){hideLoad();toast('删除失败：'+e.message,'err');});
+  if(!confirm('确定删除?'))return;
+  var p = allPosts.find(x=>x.id===id);
+  ghDel('/repos/'+cfg.owner+'/'+cfg.repo+'/contents/posts/'+p._fn, {message:'del',sha:p._sha,branch:cfg.branch})
+    .then(()=>{toast('已删除'); showList(); loadPosts(false);});
 }
 
 function editPost(id){
-  var p=allPosts.find(function(x){return x.id===id;});
-  if(!p)return;
-  editId=id;nbData=p.isNotebook?{nbCells:p.nbCells}:null;
-  document.getElementById('wm-title').textContent='✏ 编辑帖子';
-  document.getElementById('w-ti').value=p.title||'';
-  document.getElementById('w-au').value=p.author||'';
-  document.getElementById('w-cv').value=p.cover||'';
-  document.getElementById('w-em').value=p.emoji||'';
-  document.getElementById('w-tg').value=(p.tags||[]).join(', ');
-  document.getElementById('w-co').value=p.content||'';
-  document.getElementById('w-cat').value=p.category||'other';
-  if(p.isNotebook){document.getElementById('nb-name').textContent='已有 Notebook 数据';document.getElementById('nb-info').style.display='flex';}
-  else{document.getElementById('nb-info').style.display='none';}
+  var p = allPosts.find(x=>x.id===id);
+  editId=id; document.getElementById('w-ti').value=p.title;
+  document.getElementById('w-co').value=p.content;
   document.getElementById('wm').classList.remove('h');
 }
 
-function previewPost(){
-  var title=document.getElementById('w-ti').value.trim()||'（无标题）';
-  var content=document.getElementById('w-co').value.trim();
-  var author=document.getElementById('w-au').value.trim()||'匿名';
-  var cat=document.getElementById('w-cat').value;
-  var c=CAT[cat]||CAT.other;
-  var h='<div style="margin-bottom:16px"><span class="pc-cat '+c.cls+'">'+c.icon+' '+c.label+'</span>
+function openWrite(){ editId=null; nbData=null; document.getElementById('wm').classList.remove('h'); }
+function previewPost(){ previewPostLogic(); }
+
+function previewPostLogic() {
+  var ti = document.getElementById('w-ti').value || '无标题';
+  var co = document.getElementById('w-co').value;
+  var h = '<h1 class="pd-ti">' + esc(ti) + '</h1>';
+  if(nbData) h += renderNbCells(nbData.nbCells);
+  else h += '<div class="pd-bd">' + renderMD(co) + '</div>';
+  document.getElementById('pm-bd').innerHTML = h;
+  document.getElementById('pm').classList.remove('h');
+}
+
+function loadSavedCfg(){
+  var s = localStorage.getItem('tb_cfg');
+  if(s){ cfg=JSON.parse(s); connectGH(); }
+}
+
+window.onload = loadSavedCfg;
+</script>
+</body>
+</html>
