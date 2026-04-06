@@ -154,13 +154,13 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
   </div>
   <nav class="sb-nav">
     <div class="sb-sec">栏目</div>
-    <div class="sb-it on" onclick="filterCat('')" id="cat-all"><span class="ic">&#x1F3E0;</span>全部帖子<span class="sb-cn" id="cnt-all">0</span></div>
-    <div class="sb-it" onclick="filterCat('announce')" id="cat-announce"><span class="ic">&#x1F4E2;</span>公告<span class="sb-cn" id="cnt-announce">0</span></div>
-    <div class="sb-it" onclick="filterCat('tech')" id="cat-tech"><span class="ic">&#x1F4BB;</span>技术<span class="sb-cn" id="cnt-tech">0</span></div>
-    <div class="sb-it" onclick="filterCat('life')" id="cat-life"><span class="ic">&#x1F331;</span>生活<span class="sb-cn" id="cnt-life">0</span></div>
-    <div class="sb-it" onclick="filterCat('share')" id="cat-share"><span class="ic">&#x1F517;</span>分享<span class="sb-cn" id="cnt-share">0</span></div>
-    <div class="sb-it" onclick="filterCat('discuss')" id="cat-discuss"><span class="ic">&#x1F4AC;</span>讨论<span class="sb-cn" id="cnt-discuss">0</span></div>
-    <div class="sb-it" onclick="filterCat('other')" id="cat-other"><span class="ic">&#x1F4CC;</span>其他<span class="sb-cn" id="cnt-other">0</span></div>
+    <div class="sb-it on" id="cat-all" onclick="filterCat('')"><span class="ic">&#x1F3E0;</span>全部帖子<span class="sb-cn" id="cnt-all">0</span></div>
+    <div class="sb-it" id="cat-announce" onclick="filterCat('announce')"><span class="ic">&#x1F4E2;</span>公告<span class="sb-cn" id="cnt-announce">0</span></div>
+    <div class="sb-it" id="cat-tech" onclick="filterCat('tech')"><span class="ic">&#x1F4BB;</span>技术<span class="sb-cn" id="cnt-tech">0</span></div>
+    <div class="sb-it" id="cat-life" onclick="filterCat('life')"><span class="ic">&#x1F331;</span>生活<span class="sb-cn" id="cnt-life">0</span></div>
+    <div class="sb-it" id="cat-share" onclick="filterCat('share')"><span class="ic">&#x1F517;</span>分享<span class="sb-cn" id="cnt-share">0</span></div>
+    <div class="sb-it" id="cat-discuss" onclick="filterCat('discuss')"><span class="ic">&#x1F4AC;</span>讨论<span class="sb-cn" id="cnt-discuss">0</span></div>
+    <div class="sb-it" id="cat-other" onclick="filterCat('other')"><span class="ic">&#x1F4CC;</span>其他<span class="sb-cn" id="cnt-other">0</span></div>
     <div class="sb-sec" style="margin-top:8px">操作</div>
     <div class="sb-it" onclick="openWrite()"><span class="ic">&#x270F;</span>写新帖子</div>
     <div class="sb-it" onclick="loadPosts(true)"><span class="ic">&#x1F504;</span>刷新内容</div>
@@ -332,7 +332,14 @@ code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-fa
 var cfg={owner:'',repo:'',branch:'main',token:'',title:'TeamBlog'};
 var allPosts=[],curCat='',editId=null,nbData=null;
 var GH='https://api.github.com';
-var CAT={announce:{label:'公告',icon:'📢',cls:'cat-announce'},tech:{label:'技术',icon:'💻',cls:'cat-tech'},life:{label:'生活',icon:'🌱',cls:'cat-life'},share:{label:'分享',icon:'🔗',cls:'cat-share'},discuss:{label:'讨论',icon:'💬',cls:'cat-discuss'},other:{label:'其他',icon:'📌',cls:'cat-other'}};
+var CAT={
+  announce:{label:'公告',icon:'📢',cls:'cat-announce'},
+  tech:{label:'技术',icon:'💻',cls:'cat-tech'},
+  life:{label:'生活',icon:'🌱',cls:'cat-life'},
+  share:{label:'分享',icon:'🔗',cls:'cat-share'},
+  discuss:{label:'讨论',icon:'💬',cls:'cat-discuss'},
+  other:{label:'其他',icon:'📌',cls:'cat-other'}
+};
 var COLORS=['#6366f1','#ec4899','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ef4444','#06b6d4'];
 
 // Init toolbar
@@ -342,8 +349,8 @@ var COLORS=['#6366f1','#ec4899','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ef4444
   btns.forEach(function(b){
     var el=document.createElement('button');
     el.className='tb-btn';
-    el.innerHTML=b[2];
-    el.onclick=function(){insertMd(b[0],b[1]);};
+    el.textContent=b[2];
+    el.addEventListener('click',function(){insertMd(b[0],b[1]);});
     tb.appendChild(el);
   });
 })();
@@ -361,12 +368,11 @@ function toggleSb(){document.getElementById('sb').classList.toggle('col');}
 function closeM(id){document.getElementById(id).classList.add('h');}
 function openHowTo(){document.getElementById('hm').classList.remove('h');}
 function openSetup(){
-  var s=cfg;
-  document.getElementById('sm-owner').value=s.owner||'';
-  document.getElementById('sm-repo').value=s.repo||'';
-  document.getElementById('sm-branch').value=s.branch||'main';
-  document.getElementById('sm-title').value=s.title||'TeamBlog';
-  document.getElementById('sm-token').value=s.token||'';
+  document.getElementById('sm-owner').value=cfg.owner||'';
+  document.getElementById('sm-repo').value=cfg.repo||'';
+  document.getElementById('sm-branch').value=cfg.branch||'main';
+  document.getElementById('sm-title').value=cfg.title||'TeamBlog';
+  document.getElementById('sm-token').value=cfg.token||'';
   document.getElementById('sm').classList.remove('h');
 }
 function saveSetup(){
@@ -647,4 +653,4 @@ function previewPost(){
   var author=document.getElementById('w-au').value.trim()||'匿名';
   var cat=document.getElementById('w-cat').value;
   var c=CAT[cat]||CAT.other;
-  var h='<div style="margin-bottom:16px"><span class="pc-cat '+c.cls+'">'+c.icon+' '+
+  var h='<div style="margin-bottom:16px"><span class="pc-cat '+c.cls+'">'+c.icon+' '+c.label+'</span>
