@@ -1,289 +1,357 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>CollabDocs · GitHub 协作文档</title>
-  <style>
-    :root{
-      --primary:#2563eb;--primary-light:#eff6ff;--primary-dark:#1d4ed8;
-      --sidebar-bg:#0f172a;--sidebar-text:#94a3b8;--sidebar-active:#38bdf8;
-      --content-bg:#f1f5f9;--card-bg:#fff;--border:#e2e8f0;
-      --text:#1e293b;--muted:#64748b;
-      --green:#22c55e;--yellow:#f59e0b;--red:#ef4444;--purple:#8b5cf6;
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Segoe UI',system-ui,sans-serif;display:flex;height:100vh;overflow:hidden;background:var(--content-bg);color:var(--text)}
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>TeamBlog · 协作博客</title>
+<style>
+:root{
+  --primary:#2563eb;--primary-light:#eff6ff;--primary-dark:#1d4ed8;
+  --sidebar-bg:#0f172a;--sidebar-text:#94a3b8;--sidebar-active:#38bdf8;
+  --bg:#f1f5f9;--card:#fff;--border:#e2e8f0;
+  --text:#1e293b;--muted:#64748b;--muted2:#94a3b8;
+  --green:#16a34a;--green-light:#dcfce7;
+  --red:#dc2626;--red-light:#fee2e2;
+  --yellow:#d97706;--yellow-light:#fef3c7;
+  --purple:#7c3aed;--purple-light:#ede9fe;
+  --radius:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
 
-    /* ── Sidebar ── */
-    #sidebar{width:260px;min-width:260px;background:var(--sidebar-bg);display:flex;flex-direction:column;overflow:hidden;transition:width .3s}
-    #sidebar.collapsed{width:0;min-width:0}
-    .sb-logo{padding:18px 16px 14px;border-bottom:1px solid #1e293b;display:flex;align-items:center;gap:10px}
-    .sb-logo-icon{font-size:22px}
-    .sb-logo-text{color:#fff;font-size:17px;font-weight:700}
-    .sb-logo-sub{color:#475569;font-size:11px;margin-top:2px}
-    .sb-nav{flex:1;overflow-y:auto;padding:10px 0}
-    .sb-section{color:#334155;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:10px 16px 4px}
-    .sb-item{display:flex;align-items:center;gap:8px;padding:8px 16px;color:var(--sidebar-text);cursor:pointer;font-size:13px;border-left:3px solid transparent;transition:all .15s;user-select:none}
-    .sb-item:hover{background:#1e293b;color:#fff}
-    .sb-item.active{background:#1e3a5f;color:var(--sidebar-active);border-left-color:var(--sidebar-active)}
-    .sb-item .ico{width:18px;text-align:center;font-size:14px}
-    .sb-footer{padding:12px 14px;border-top:1px solid #1e293b}
-    .gh-status{background:#1e293b;border-radius:8px;padding:10px 12px;font-size:12px}
-    .gh-status-row{display:flex;align-items:center;gap:6px;color:var(--sidebar-text);margin-bottom:4px}
-    .gh-status-row:last-child{margin-bottom:0}
-    .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-    .dot.green{background:var(--green);animation:pulse 2s infinite}
-    .dot.yellow{background:var(--yellow)}
-    .dot.red{background:var(--red)}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+/* ── Sidebar ── */
+#sidebar{width:240px;min-width:240px;background:var(--sidebar-bg);display:flex;flex-direction:column;transition:width .3s;overflow:hidden}
+#sidebar.collapsed{width:0;min-width:0}
+.sb-top{padding:16px 14px 12px;border-bottom:1px solid #1e293b}
+.sb-brand{display:flex;align-items:center;gap:9px}
+.sb-brand-icon{font-size:22px}
+.sb-brand-name{color:#fff;font-size:16px;font-weight:700}
+.sb-brand-sub{color:#475569;font-size:11px;margin-top:2px}
+.sb-nav{flex:1;overflow-y:auto;padding:8px 0}
+.sb-sec{color:#334155;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:10px 14px 3px}
+.sb-item{display:flex;align-items:center;gap:8px;padding:8px 14px;color:var(--sidebar-text);cursor:pointer;font-size:13px;border-left:3px solid transparent;transition:all .15s;user-select:none;white-space:nowrap}
+.sb-item:hover{background:#1e293b;color:#fff}
+.sb-item.active{background:#1e3a5f;color:var(--sidebar-active);border-left-color:var(--sidebar-active)}
+.sb-item .ico{width:18px;text-align:center;font-size:14px;flex-shrink:0}
+.sb-count{margin-left:auto;background:#334155;color:#94a3b8;font-size:10px;padding:1px 6px;border-radius:10px}
+.sb-footer{padding:10px 12px;border-top:1px solid #1e293b}
+.gh-pill{background:#1e293b;border-radius:8px;padding:9px 11px;font-size:11px;color:var(--sidebar-text);display:flex;flex-direction:column;gap:4px}
+.gh-pill-row{display:flex;align-items:center;gap:6px}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:#334155}
+.dot.on{background:#22c55e;animation:pulse 2s infinite}
+.dot.warn{background:#f59e0b}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-    /* ── Main ── */
-    #main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-    #topbar{background:var(--card-bg);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;padding:0 20px;height:54px;flex-shrink:0}
-    #toggle-sb{background:none;border:1px solid var(--border);border-radius:6px;width:30px;height:30px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .2s}
-    #toggle-sb:hover{background:var(--primary-light);color:var(--primary)}
-    .tb-title{font-size:15px;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .tb-actions{display:flex;gap:8px;align-items:center}
-    .btn{padding:6px 14px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
-    .btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
-    .btn-outline{background:#fff;color:var(--text);border:1px solid var(--border)}.btn-outline:hover{background:var(--primary-light);border-color:var(--primary);color:var(--primary)}
-    .btn-green{background:var(--green);color:#fff}.btn-green:hover{background:#16a34a}
-    .btn-red{background:var(--red);color:#fff}.btn-red:hover{background:#dc2626}
-    .btn-yellow{background:var(--yellow);color:#fff}.btn-yellow:hover{background:#d97706}
-    .btn-sm{padding:5px 11px;font-size:12px}
-    .btn-xs{padding:3px 8px;font-size:11px}
-    .btn:disabled{opacity:.5;cursor:not-allowed}
+/* ── Main ── */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
 
-    /* ── Content ── */
-    #content-area{flex:1;overflow-y:auto;padding:28px 36px}
-    .page-header{margin-bottom:28px}
-    .page-header h1{font-size:26px;font-weight:700;margin-bottom:6px}
-    .page-header p{color:var(--muted);font-size:14px;line-height:1.7}
-    .page-meta{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center}
-    .tag{background:#dbeafe;color:#1d4ed8;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600}
-    .tag.green{background:#dcfce7;color:#15803d}
-    .tag.purple{background:#ede9fe;color:#6d28d9}
+/* Topbar */
+#topbar{background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;padding:0 18px;height:52px;flex-shrink:0}
+#toggle-sb{background:none;border:1px solid var(--border);border-radius:6px;width:30px;height:30px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .2s}
+#toggle-sb:hover{background:var(--primary-light);color:var(--primary)}
+.tb-title{font-size:15px;font-weight:600;flex:1}
+.tb-right{display:flex;gap:8px;align-items:center}
+.btn{padding:6px 13px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
+.btn-outline{background:var(--card);color:var(--text);border:1px solid var(--border)}.btn-outline:hover{background:var(--primary-light);border-color:var(--primary);color:var(--primary)}
+.btn-green{background:var(--green);color:#fff}.btn-green:hover{background:#15803d}
+.btn-red{background:var(--red);color:#fff}.btn-red:hover{background:#b91c1c}
+.btn-sm{padding:5px 11px;font-size:12px}
+.btn-xs{padding:3px 8px;font-size:11px}
 
-    /* ── GitHub Config Banner ── */
-    #config-banner{background:linear-gradient(135deg,#1e3a5f,#1e293b);border-radius:12px;padding:24px;margin-bottom:24px;color:#fff}
-    #config-banner h2{font-size:17px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
-    #config-banner p{font-size:13px;color:#94a3b8;margin-bottom:16px;line-height:1.6}
-    .config-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media(max-width:600px){.config-grid{grid-template-columns:1fr}}
-    .config-field label{display:block;font-size:11px;color:#94a3b8;margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
-    .config-field input{width:100%;background:#0f172a;border:1px solid #334155;border-radius:6px;padding:8px 10px;color:#fff;font-size:13px;outline:none;transition:border-color .2s;font-family:monospace}
-    .config-field input:focus{border-color:var(--sidebar-active)}
-    .config-actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
-    #config-banner.connected{background:linear-gradient(135deg,#14532d,#052e16)}
+/* Content */
+#content{flex:1;overflow-y:auto;display:flex;flex-direction:column}
 
-    /* ── Sync Bar ── */
-    #sync-bar{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-    .sync-info{flex:1;font-size:13px;color:var(--muted)}
-    .sync-info strong{color:var(--text)}
-    .sync-actions{display:flex;gap:8px;flex-wrap:wrap}
+/* ── Setup Banner ── */
+#setup-banner{background:linear-gradient(135deg,#1e3a5f 0%,#0f172a 100%);padding:22px 28px;flex-shrink:0}
+#setup-banner.done{background:linear-gradient(135deg,#14532d,#052e16)}
+.setup-title{color:#fff;font-size:16px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.setup-desc{color:#94a3b8;font-size:12px;margin-bottom:14px;line-height:1.6}
+.setup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.sf{display:flex;flex-direction:column;gap:4px}
+.sf label{color:#64748b;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.sf input{background:#0f172a;border:1px solid #334155;border-radius:6px;padding:7px 10px;color:#fff;font-size:12px;outline:none;font-family:monospace;transition:border-color .2s}
+.sf input:focus{border-color:var(--sidebar-active)}
+.setup-actions{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
 
-    /* ── Section Cards ── */
-    .section-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:18px;overflow:hidden;transition:box-shadow .2s}
-    .section-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.08)}
-    .sc-header{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--border);background:#fafbfc}
-    .step-num{background:var(--primary);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
-    .sc-title{font-size:15px;font-weight:600;flex:1}
-    .sc-actions{display:flex;gap:6px}
-    .sc-body{padding:18px}
-    .sc-content{font-size:14px;line-height:1.8;color:var(--text);white-space:pre-wrap}
-    .sc-image{margin-top:14px}
-    .sc-image img{max-width:100%;border-radius:8px;border:1px solid var(--border)}
-    .sc-image-caption{font-size:12px;color:var(--muted);margin-top:5px;text-align:center}
-    .sc-img-placeholder{background:var(--content-bg);border:2px dashed var(--border);border-radius:8px;padding:24px;text-align:center;color:var(--muted);font-size:13px;margin-top:14px;cursor:pointer;transition:all .2s}
-    .sc-img-placeholder:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light)}
-    .sc-meta{margin-top:12px;font-size:12px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:10px}
+/* ── View: List ── */
+#view-list{flex:1;overflow-y:auto;padding:20px 24px}
+.view-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.view-header h2{font-size:20px;font-weight:700;flex:1}
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.filter-chip{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:var(--card);color:var(--muted);transition:all .2s;user-select:none}
+.filter-chip:hover{border-color:var(--primary);color:var(--primary)}
+.filter-chip.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.search-input{border:1px solid var(--border);border-radius:7px;padding:6px 12px;font-size:13px;outline:none;width:180px;transition:border-color .2s}
+.search-input:focus{border-color:var(--primary)}
 
-    /* ── Add Section ── */
-    .add-btn{display:flex;align-items:center;justify-content:center;gap:8px;border:2px dashed var(--border);border-radius:12px;padding:18px;cursor:pointer;color:var(--muted);font-size:14px;font-weight:500;transition:all .2s;background:none;width:100%;margin-bottom:20px}
-    .add-btn:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light)}
+/* Post cards grid */
+.posts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.post-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .2s;display:flex;flex-direction:column}
+.post-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.1);transform:translateY(-2px)}
+.post-card-cover{height:140px;background:linear-gradient(135deg,#1e3a5f,#1e293b);display:flex;align-items:center;justify-content:center;font-size:48px;flex-shrink:0;position:relative;overflow:hidden}
+.post-card-cover img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.post-card-cover .cover-emoji{position:relative;z-index:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.3))}
+.post-card-body{padding:14px;flex:1;display:flex;flex-direction:column}
+.post-card-cat{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;margin-bottom:8px}
+.post-card-title{font-size:15px;font-weight:700;line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.post-card-excerpt{font-size:12px;color:var(--muted);line-height:1.6;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.post-card-footer{display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.avatar-sm{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.post-card-author{font-size:12px;color:var(--muted);flex:1}
+.post-card-date{font-size:11px;color:var(--muted2)}
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-state .es-icon{font-size:48px;margin-bottom:12px}
+.empty-state p{font-size:14px;line-height:1.7}
 
-    /* ── Modals ── */
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
-    .overlay.hidden{display:none}
-    .modal{background:#fff;border-radius:14px;width:100%;max-width:640px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.2)}
-    .modal-hd{padding:18px 22px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-    .modal-hd h3{font-size:17px;font-weight:600}
-    .modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);line-height:1}
-    .modal-bd{padding:18px 22px;overflow-y:auto;flex:1}
-    .modal-ft{padding:14px 22px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end}
-    .fg{margin-bottom:14px}
-    .fg label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
-    .fg input,.fg textarea,.fg select{width:100%;border:1px solid var(--border);border-radius:7px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none;transition:border-color .2s}
-    .fg input:focus,.fg textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
-    .fg textarea{resize:vertical;min-height:110px}
-    .fg .hint{font-size:11px;color:var(--muted);margin-top:4px}
+/* ── View: Post Detail ── */
+#view-post{flex:1;overflow-y:auto;padding:24px 28px;display:none;max-width:800px;width:100%;margin:0 auto}
+.post-back{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;cursor:pointer;margin-bottom:20px;transition:color .2s}
+.post-back:hover{color:var(--primary)}
+.post-detail-cat{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+.post-detail-title{font-size:26px;font-weight:800;line-height:1.3;margin-bottom:12px}
+.post-detail-meta{display:flex;align-items:center;gap:14px;color:var(--muted);font-size:13px;margin-bottom:20px;flex-wrap:wrap}
+.post-detail-cover{width:100%;max-height:320px;object-fit:cover;border-radius:var(--radius);margin-bottom:24px;border:1px solid var(--border)}
+.post-detail-body{font-size:15px;line-height:1.9;color:var(--text);white-space:pre-wrap}
+.post-detail-body img{max-width:100%;border-radius:8px;margin:12px 0}
+.post-detail-actions{display:flex;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
 
-    /* ── Conflict Modal ── */
-    .conflict-diff{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-    .diff-panel{background:var(--content-bg);border-radius:8px;padding:12px;font-size:12px}
-    .diff-panel h4{font-size:12px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-    .diff-content{white-space:pre-wrap;line-height:1.6;color:var(--text);max-height:200px;overflow-y:auto}
+/* ── Write Modal ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:1000;padding:12px}
+.overlay.hidden{display:none}
+.modal{background:#fff;border-radius:14px;width:100%;max-width:700px;max-height:95vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.2)}
+.modal-lg{max-width:860px}
+.modal-hd{padding:16px 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-hd h3{font-size:17px;font-weight:700}
+.mc{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);line-height:1;padding:2px}
+.modal-bd{padding:16px 20px;overflow-y:auto;flex:1}
+.modal-ft{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;flex-shrink:0}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+.fg input,.fg textarea,.fg select{width:100%;border:1px solid var(--border);border-radius:7px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none;transition:border-color .2s;background:#fff;color:var(--text)}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.fg textarea{resize:vertical;min-height:180px;line-height:1.7}
+.fg .hint{font-size:11px;color:var(--muted2);margin-top:4px}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.write-toolbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tb-btn{padding:4px 10px;border:1px solid var(--border);border-radius:5px;background:#fff;font-size:12px;cursor:pointer;color:var(--muted);transition:all .2s}
+.tb-btn:hover{background:var(--primary-light);color:var(--primary);border-color:var(--primary)}
 
-    /* ── Loading ── */
-    #loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2000;gap:12px}
-    #loading-overlay.hidden{display:none}
-    .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    #loading-msg{font-size:14px;color:var(--muted)}
+/* Category colors */
+.cat-announce{background:#fef3c7;color:#92400e}
+.cat-tech{background:#dbeafe;color:#1e40af}
+.cat-life{background:#dcfce7;color:#166534}
+.cat-share{background:#ede9fe;color:#5b21b6}
+.cat-discuss{background:#fee2e2;color:#991b1b}
+.cat-other{background:#f1f5f9;color:#475569}
 
-    /* ── Toast ── */
-    #toast{position:fixed;bottom:22px;right:22px;background:#1e293b;color:#fff;padding:11px 18px;border-radius:10px;font-size:13px;z-index:3000;transform:translateY(70px);opacity:0;transition:all .3s;pointer-events:none;display:flex;align-items:center;gap:8px;max-width:320px}
-    #toast.show{transform:translateY(0);opacity:1}
-    #toast.error{background:#7f1d1d}
-    #toast.success{background:#14532d}
+/* Loading */
+#loading{position:fixed;inset:0;background:rgba(255,255,255,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2000;gap:12px}
+#loading.hidden{display:none}
+.spinner{width:34px;height:34px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loading p{font-size:13px;color:var(--muted)}
 
-    /* ── History ── */
-    .history-item{padding:10px 12px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;font-size:13px}
-    .history-item-meta{display:flex;gap:10px;color:var(--muted);font-size:11px;margin-top:4px}
+/* Toast */
+#toast{position:fixed;bottom:20px;right:20px;padding:10px 16px;border-radius:9px;font-size:13px;z-index:3000;transform:translateY(60px);opacity:0;transition:all .3s;pointer-events:none;display:flex;align-items:center;gap:7px;max-width:300px;background:#1e293b;color:#fff}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.ok{background:#14532d}
+#toast.err{background:#7f1d1d}
+#toast.warn{background:#78350f}
 
-    ::-webkit-scrollbar{width:5px}
-    ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
-  </style>
+/* Scrollbar */
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+
+/* Setup howto */
+.howto-step{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start}
+.howto-num{background:var(--primary);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
+.howto-text{font-size:13px;line-height:1.7;color:var(--text)}
+code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px;font-family:monospace}
+</style>
 </head>
 <body>
 
 <!-- Loading -->
-<div id="loading-overlay" class="hidden">
-  <div class="spinner"></div>
-  <div id="loading-msg">正在连接 GitHub...</div>
-</div>
+<div id="loading" class="hidden"><div class="spinner"></div><p id="loading-msg">加载中...</p></div>
 
 <!-- Sidebar -->
 <div id="sidebar">
-  <div class="sb-logo">
-    <div class="sb-logo-icon">📄</div>
-    <div>
-      <div class="sb-logo-text">CollabDocs</div>
-      <div class="sb-logo-sub">GitHub 协作文档</div>
+  <div class="sb-top">
+    <div class="sb-brand">
+      <div class="sb-brand-icon">📰</div>
+      <div><div class="sb-brand-name">TeamBlog</div><div class="sb-brand-sub">协作博客平台</div></div>
     </div>
   </div>
   <nav class="sb-nav" id="sb-nav">
-    <div class="sb-section">文档导航</div>
-    <div class="sb-item" id="nav-loading"><span class="ico">⏳</span>加载中...</div>
+    <div class="sb-sec">栏目</div>
+    <div class="sb-item active" onclick="filterCat('')" id="cat-all"><span class="ico">🏠</span>全部帖子<span class="sb-count" id="cnt-all">0</span></div>
+    <div class="sb-item" onclick="filterCat('announce')" id="cat-announce"><span class="ico">📢</span>公告<span class="sb-count" id="cnt-announce">0</span></div>
+    <div class="sb-item" onclick="filterCat('tech')" id="cat-tech"><span class="ico">💻</span>技术<span class="sb-count" id="cnt-tech">0</span></div>
+    <div class="sb-item" onclick="filterCat('life')" id="cat-life"><span class="ico">🌱</span>生活<span class="sb-count" id="cnt-life">0</span></div>
+    <div class="sb-item" onclick="filterCat('share')" id="cat-share"><span class="ico">🔗</span>分享<span class="sb-count" id="cnt-share">0</span></div>
+    <div class="sb-item" onclick="filterCat('discuss')" id="cat-discuss"><span class="ico">💬</span>讨论<span class="sb-count" id="cnt-discuss">0</span></div>
+    <div class="sb-item" onclick="filterCat('other')" id="cat-other"><span class="ico">📌</span>其他<span class="sb-count" id="cnt-other">0</span></div>
+    <div class="sb-sec" style="margin-top:8px">操作</div>
+    <div class="sb-item" onclick="openWrite()"><span class="ico">✏️</span>写新帖子</div>
+    <div class="sb-item" onclick="loadPosts(true)"><span class="ico">🔄</span>刷新内容</div>
+    <div class="sb-item" onclick="openSetup()"><span class="ico">⚙️</span>GitHub 设置</div>
+    <div class="sb-item" onclick="openHowTo()"><span class="ico">❓</span>使用帮助</div>
   </nav>
   <div class="sb-footer">
-    <div class="gh-status">
-      <div class="gh-status-row"><div class="dot" id="dot-conn"></div><span id="status-conn">未连接</span></div>
-      <div class="gh-status-row"><div class="dot yellow"></div><span id="status-repo">未配置仓库</span></div>
-      <div class="gh-status-row" style="margin-top:6px;font-size:11px;color:#475569" id="status-lastpush"></div>
+    <div class="gh-pill">
+      <div class="gh-pill-row"><div class="dot" id="dot-status"></div><span id="txt-status">未连接</span></div>
+      <div class="gh-pill-row" style="font-size:10px;color:#475569" id="txt-repo">请先配置 GitHub</div>
     </div>
   </div>
 </div>
 
 <!-- Main -->
 <div id="main">
+  <!-- Topbar -->
   <div id="topbar">
-    <button id="toggle-sb" title="切换侧栏">☰</button>
-    <div class="tb-title" id="tb-title">CollabDocs</div>
-    <div class="tb-actions">
-      <button class="btn btn-outline btn-sm" onclick="openHistory()">📋 历史</button>
-      <button class="btn btn-outline btn-sm" onclick="pullFromGitHub()">⬇ 拉取</button>
-      <button class="btn btn-green btn-sm" id="push-btn" onclick="pushToGitHub()">⬆ 推送到 GitHub</button>
-      <button class="btn btn-primary btn-sm" onclick="openAddSection()">＋ 新增章节</button>
+    <button id="toggle-sb">☰</button>
+    <div class="tb-title" id="tb-title">TeamBlog 协作博客</div>
+    <div class="tb-right">
+      <button class="btn btn-outline btn-sm" onclick="loadPosts(true)">🔄 刷新</button>
+      <button class="btn btn-green btn-sm" onclick="openWrite()">✏️ 写帖子</button>
     </div>
   </div>
 
-  <div id="content-area">
+  <!-- Content -->
+  <div id="content">
 
-    <!-- GitHub Config Banner -->
-    <div id="config-banner">
-      <h2>🔗 连接 GitHub 仓库</h2>
-      <p>输入你的 GitHub 仓库信息和 Personal Access Token，文档内容将存储在仓库的 <code style="background:#0f172a;padding:1px 6px;border-radius:4px">content.json</code> 文件中，并通过 GitHub Pages 自动发布。</p>
-      <div class="config-grid">
-        <div class="config-field">
-          <label>GitHub 用户名</label>
-          <input id="cfg-owner" placeholder="your-username" autocomplete="off"/>
-        </div>
-        <div class="config-field">
-          <label>仓库名称</label>
-          <input id="cfg-repo" placeholder="my-collab-docs" autocomplete="off"/>
-        </div>
-        <div class="config-field">
-          <label>分支（默认 main）</label>
-          <input id="cfg-branch" placeholder="main" value="main" autocomplete="off"/>
-        </div>
-        <div class="config-field">
-          <label>content.json 路径</label>
-          <input id="cfg-path" placeholder="content.json" value="content.json" autocomplete="off"/>
-        </div>
-        <div class="config-field" style="grid-column:1/-1">
-          <label>Personal Access Token（PAT）</label>
-          <input id="cfg-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off"/>
-        </div>
+    <!-- Setup Banner -->
+    <div id="setup-banner">
+      <div class="setup-title">🔗 连接 GitHub 仓库</div>
+      <div class="setup-desc">帖子将存储在 <code>posts/</code> 目录下，每篇独立 JSON 文件，GitHub Pages 自动发布。</div>
+      <div class="setup-grid">
+        <div class="sf"><label>GitHub 用户名</label><input id="cfg-owner" placeholder="your-username"/></div>
+        <div class="sf"><label>仓库名称</label><input id="cfg-repo" placeholder="team-blog"/></div>
+        <div class="sf"><label>分支</label><input id="cfg-branch" value="main" placeholder="main"/></div>
+        <div class="sf"><label>博客标题</label><input id="cfg-title" value="TeamBlog" placeholder="我的团队博客"/></div>
+        <div class="sf" style="grid-column:1/-1"><label>Personal Access Token</label><input id="cfg-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"/></div>
       </div>
-      <div class="config-actions">
-        <button class="btn btn-green btn-sm" onclick="connectGitHub()">🔌 连接并拉取内容</button>
-        <button class="btn btn-outline btn-sm" style="background:transparent;color:#94a3b8;border-color:#334155" onclick="loadConfig()">↩ 读取已保存配置</button>
-        <button class="btn btn-outline btn-sm" style="background:transparent;color:#94a3b8;border-color:#334155" onclick="openHowTo()">❓ 如何获取 Token</button>
+      <div class="setup-actions">
+        <button class="btn btn-green btn-sm" onclick="connectGH()">🔌 连接并加载帖子</button>
+        <button class="btn btn-sm" style="background:transparent;border:1px solid #334155;color:#94a3b8" onclick="loadSavedCfg()">↩ 读取已保存配置</button>
+        <button class="btn btn-sm" style="background:transparent;border:1px solid #334155;color:#94a3b8" onclick="openHowTo()">❓ 帮助</button>
       </div>
     </div>
 
-    <!-- Sync Bar -->
-    <div id="sync-bar">
-      <div class="sync-info">
-        <strong id="sync-doc-title">文档未加载</strong>
-        <span id="sync-meta"> · 请先连接 GitHub</span>
+    <!-- List View -->
+    <div id="view-list">
+      <div class="view-header">
+        <h2 id="view-title">全部帖子</h2>
+        <div class="filter-bar">
+          <input class="search-input" id="search-input" placeholder="🔍 搜索帖子..." oninput="renderList()"/>
+          <select class="search-input" id="sort-select" onchange="renderList()" style="width:auto">
+            <option value="newest">最新优先</option>
+            <option value="oldest">最旧优先</option>
+            <option value="author">按作者</option>
+          </select>
+        </div>
       </div>
-      <div class="sync-actions">
-        <button class="btn btn-outline btn-sm" onclick="pullFromGitHub()">⬇ 拉取最新</button>
-        <button class="btn btn-green btn-sm" onclick="pushToGitHub()">⬆ 推送保存</button>
-        <button class="btn btn-outline btn-sm" onclick="openEditHeader()">✏️ 编辑标题</button>
+      <div class="posts-grid" id="posts-grid">
+        <div class="empty-state" style="grid-column:1/-1">
+          <div class="es-icon">📰</div>
+          <p>请先连接 GitHub 仓库<br/>或点击「写帖子」发布第一篇内容</p>
+        </div>
       </div>
     </div>
 
-    <!-- Page Header -->
-    <div class="page-header" id="page-header">
-      <h1 id="ph-title">文档标题</h1>
-      <p id="ph-desc">文档描述</p>
-      <div class="page-meta" id="ph-meta"></div>
+    <!-- Post Detail View -->
+    <div id="view-post">
+      <div class="post-back" onclick="showList()">← 返回列表</div>
+      <div id="post-detail-content"></div>
     </div>
 
-    <!-- Sections -->
-    <div id="sections-container"></div>
-    <button class="add-btn" onclick="openAddSection()">＋ 添加新章节</button>
   </div>
 </div>
 
-<!-- ── Edit Section Modal ── -->
-<div class="overlay hidden" id="edit-modal">
-  <div class="modal">
+<!-- ── Write / Edit Modal ── -->
+<div class="overlay hidden" id="write-modal">
+  <div class="modal modal-lg">
     <div class="modal-hd">
-      <h3 id="edit-modal-title">编辑章节</h3>
-      <button class="modal-close" onclick="closeModal('edit-modal')">✕</button>
+      <h3 id="write-modal-title">✏️ 写新帖子</h3>
+      <button class="mc" onclick="closeModal('write-modal')">✕</button>
     </div>
     <div class="modal-bd">
-      <div class="fg"><label>章节图标 Emoji</label><input id="em-icon" placeholder="📌" maxlength="4"/></div>
-      <div class="fg"><label>章节标题</label><input id="em-title" placeholder="输入标题..."/></div>
-      <div class="fg"><label>章节内容</label><textarea id="em-content" rows="6" placeholder="支持换行，Markdown 风格书写..."></textarea></div>
-      <div class="fg"><label>图片 URL（可选）</label><input id="em-image" placeholder="https://example.com/image.png"/></div>
-      <div class="fg"><label>图片说明（可选）</label><input id="em-caption" placeholder="图片说明文字"/></div>
-      <div class="fg"><label>编辑者署名</label><input id="em-author" placeholder="你的名字"/></div>
+      <div class="fg-row">
+        <div class="fg">
+          <label>帖子标题 *</label>
+          <input id="w-title" placeholder="输入标题..."/>
+        </div>
+        <div class="fg">
+          <label>栏目分类 *</label>
+          <select id="w-cat">
+            <option value="announce">📢 公告</option>
+            <option value="tech">💻 技术</option>
+            <option value="life">🌱 生活</option>
+            <option value="share">🔗 分享</option>
+            <option value="discuss">💬 讨论</option>
+            <option value="other">📌 其他</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg-row">
+        <div class="fg">
+          <label>作者署名 *</label>
+          <input id="w-author" placeholder="你的名字"/>
+        </div>
+        <div class="fg">
+          <label>封面图片 URL（可选）</label>
+          <input id="w-cover" placeholder="https://example.com/cover.jpg"/>
+        </div>
+      </div>
+      <div class="fg">
+        <label>帖子封面 Emoji（无封面图时显示）</label>
+        <input id="w-emoji" placeholder="📝" maxlength="4" style="width:80px"/>
+      </div>
+      <div class="fg">
+        <label>帖子内容 *</label>
+        <div class="write-toolbar">
+          <button class="tb-btn" onclick="insertMd('**','**')"><b>B</b></button>
+          <button class="tb-btn" onclick="insertMd('*','*')"><i>I</i></button>
+          <button class="tb-btn" onclick="insertMd('## ','')">H2</button>
+          <button class="tb-btn" onclick="insertMd('### ','')">H3</button>
+          <button class="tb-btn" onclick="insertMd('\n- ','')">列表</button>
+          <button class="tb-btn" onclick="insertMd('\n> ','')">引用</button>
+          <button class="tb-btn" onclick="insertMd('`','`')">代码</button>
+          <button class="tb-btn" onclick="insertMd('\n```\n','\n```')">代码块</button>
+          <button class="tb-btn" onclick="insertMd('![图片](',')')">图片</button>
+          <button class="tb-btn" onclick="insertMd('[链接](',')')">链接</button>
+        </div>
+        <textarea id="w-content" rows="12" placeholder="在这里写内容...&#10;&#10;支持基本 Markdown 格式：&#10;**粗体** *斜体*&#10;## 标题&#10;- 列表项&#10;> 引用&#10;`代码`"></textarea>
+        <div class="hint">支持 Markdown 语法，图片可填写图片 URL</div>
+      </div>
+      <div class="fg">
+        <label>标签（逗号分隔，可选）</label>
+        <input id="w-tags" placeholder="标签1, 标签2, 标签3"/>
+      </div>
     </div>
     <div class="modal-ft">
-      <button class="btn btn-outline" onclick="closeModal('edit-modal')">取消</button>
-      <button class="btn btn-primary" onclick="saveSection()">💾 保存章节</button>
+      <button class="btn btn-outline" onclick="closeModal('write-modal')">取消</button>
+      <button class="btn btn-outline btn-sm" onclick="previewPost()">👁 预览</button>
+      <button class="btn btn-green" onclick="publishPost()">🚀 发布到 GitHub</button>
     </div>
   </div>
 </div>
 
-<!-- ── Edit Header Modal ── -->
-<div class="overlay hidden" id="header-modal">
-  <div class="modal">
-    <div class="modal-hd"><h3>编辑文档信息</h3><button class="modal-close" onclick="closeModal('header-modal')">✕</button></div>
+<!-- ── Setup Modal ── -->
+<div class="overlay hidden" id="setup-modal">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-hd"><h3>⚙️ GitHub 设置</h3><button class="mc" onclick="closeModal('setup-modal')">✕</button></div>
     <div class="modal-bd">
-      <div class="fg"><label>文档标题</label><input id="hm-title" placeholder="文档标题"/></div>
-      <div class="fg"><label>文档描述</label><textarea id="hm-desc" rows="3" placeholder="文档描述..."></textarea></div>
-      <div class="fg"><label>标签（逗号分隔）</label><input id="hm-tags" placeholder="标签1, 标签2"/></div>
+      <div class="fg"><label>GitHub 用户名</label><input id="sm-owner" placeholder="your-username"/></div>
+      <div class="fg"><label>仓库名称</label><input id="sm-repo" placeholder="team-blog"/></div>
+      <div class="fg"><label>分支</label><input id="sm-branch" value="main"/></div>
+      <div class="fg"><label>博客标题</label><input id="sm-title" value="TeamBlog"/></div>
+      <div class="fg"><label>Personal Access Token</label><input id="sm-token" type="password" placeholder="ghp_xxxx"/></div>
     </div>
     <div class="modal-ft">
-      <button class="btn btn-outline" onclick="closeModal('header-modal')">取消</button>
-      <button class="btn btn-primary" onclick="saveHeader()">💾 保存</button>
+      <button class="btn btn-outline" onclick="closeModal('setup-modal')">取消</button>
+      <button class="btn btn-green" onclick="saveSetupModal()">💾 保存并重新连接</button>
     </div>
   </div>
 </div>
@@ -291,66 +359,31 @@
 <!-- ── HowTo Modal ── -->
 <div class="overlay hidden" id="howto-modal">
   <div class="modal" style="max-width:560px">
-    <div class="modal-hd"><h3>🔑 如何获取 GitHub Token</h3><button class="modal-close" onclick="closeModal('howto-modal')">✕</button></div>
+    <div class="modal-hd"><h3>📖 使用帮助</h3><button class="mc" onclick="closeModal('howto-modal')">✕</button></div>
     <div class="modal-bd">
-      <div style="font-size:14px;line-height:1.8;color:var(--text)">
-        <p style="margin-bottom:12px">Personal Access Token (PAT) 用于授权网页读写你的 GitHub 仓库。</p>
-        <ol style="padding-left:20px;display:flex;flex-direction:column;gap:10px">
-          <li>登录 GitHub，点击右上角头像 → <strong>Settings</strong></li>
-          <li>左侧菜单滚动到底部 → <strong>Developer settings</strong></li>
-          <li>选择 <strong>Personal access tokens → Tokens (classic)</strong></li>
-          <li>点击 <strong>Generate new token (classic)</strong></li>
-          <li>填写备注名，Expiration 选择合适期限</li>
-          <li>勾选权限：<code style="background:#f1f5f9;padding:1px 5px;border-radius:4px">repo</code>（完整仓库访问）</li>
-          <li>点击 <strong>Generate token</strong>，<span style="color:var(--red);font-weight:600">立即复制保存</span>（只显示一次）</li>
-        </ol>
-        <div style="background:#fef9c3;border:1px solid #fde047;border-radius:8px;padding:12px;margin-top:16px;font-size:13px">
-          ⚠️ Token 仅保存在你的浏览器 localStorage 中，不会上传到任何服务器。建议为协作文档单独创建一个仓库。
-        </div>
-        <div style="margin-top:14px">
-          <strong>仓库设置（启用 GitHub Pages）：</strong>
-          <ol style="padding-left:20px;margin-top:6px;display:flex;flex-direction:column;gap:6px;font-size:13px">
-            <li>在 GitHub 创建新仓库（Public）</li>
-            <li>仓库 Settings → Pages → Source 选择 <strong>Deploy from a branch → main / root</strong></li>
-            <li>将本 HTML 文件重命名为 <strong>index.html</strong> 上传到仓库根目录</li>
-            <li>几分钟后即可通过 <code>https://用户名.github.io/仓库名</code> 访问</li>
-          </ol>
-        </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px">TeamBlog 将帖子存储在 GitHub 仓库的 <code>posts/</code> 目录，通过 GitHub Pages 免费发布。</p>
+      <div class="howto-step"><div class="howto-num">1</div><div class="howto-text">在 GitHub 创建一个 <strong>Public</strong> 仓库，开启 <strong>GitHub Pages</strong>（Settings → Pages → Deploy from branch → main）</div></div>
+      <div class="howto-step"><div class="howto-num">2</div><div class="howto-text">将本 HTML 文件命名为 <code>index.html</code> 上传到仓库根目录</div></div>
+      <div class="howto-step"><div class="howto-num">3</div><div class="howto-text">获取 Personal Access Token：GitHub → Settings → Developer settings → Personal access tokens → 勾选 <code>repo</code> 权限</div></div>
+      <div class="howto-step"><div class="howto-num">4</div><div class="howto-text">在配置栏填入用户名、仓库名、Token，点击「连接」</div></div>
+      <div class="howto-step"><div class="howto-num">5</div><div class="howto-text">点击「写帖子」，填写内容后「发布到 GitHub」，约 <strong>1 分钟</strong>后网页自动更新</div></div>
+      <div class="howto-step"><div class="howto-num">6</div><div class="howto-text">团队成员打开同一网址，填入各自的 Token，即可独立发帖，互不干扰</div></div>
+      <div style="background:#fef9c3;border:1px solid #fde047;border-radius:8px;padding:12px;font-size:12px;margin-top:8px">
+        💡 每篇帖子是独立文件，多人同时发帖不会冲突。Token 仅存在本地浏览器，不会上传。
       </div>
     </div>
     <div class="modal-ft"><button class="btn btn-primary" onclick="closeModal('howto-modal')">明白了</button></div>
   </div>
 </div>
 
-<!-- ── History Modal ── -->
-<div class="overlay hidden" id="history-modal">
-  <div class="modal">
-    <div class="modal-hd"><h3>📋 编辑历史（本地）</h3><button class="modal-close" onclick="closeModal('history-modal')">✕</button></div>
-    <div class="modal-bd" id="history-list"></div>
-    <div class="modal-ft"><button class="btn btn-outline" onclick="closeModal('history-modal')">关闭</button></div>
-  </div>
-</div>
-
-<!-- ── Conflict Modal ── -->
-<div class="overlay hidden" id="conflict-modal">
-  <div class="modal" style="max-width:700px">
-    <div class="modal-hd"><h3>⚠️ 检测到内容冲突</h3><button class="modal-close" onclick="closeModal('conflict-modal')">✕</button></div>
-    <div class="modal-bd">
-      <p style="font-size:13px;color:var(--muted);margin-bottom:4px">GitHub 上的内容与本地内容不同，请选择保留哪个版本：</p>
-      <div class="conflict-diff">
-        <div class="diff-panel">
-          <h4>🌐 GitHub 远端版本</h4>
-          <div class="diff-content" id="conflict-remote"></div>
-        </div>
-        <div class="diff-panel">
-          <h4>💻 本地版本</h4>
-          <div class="diff-content" id="conflict-local"></div>
-        </div>
-      </div>
-    </div>
+<!-- ── Preview Modal ── -->
+<div class="overlay hidden" id="preview-modal">
+  <div class="modal modal-lg">
+    <div class="modal-hd"><h3>👁 帖子预览</h3><button class="mc" onclick="closeModal('preview-modal')">✕</button></div>
+    <div class="modal-bd" id="preview-content"></div>
     <div class="modal-ft">
-      <button class="btn btn-outline" onclick="resolveConflict('remote')">使用远端版本</button>
-      <button class="btn btn-yellow" onclick="resolveConflict('local')">保留本地版本（强制推送）</button>
+      <button class="btn btn-outline" onclick="closeModal('preview-modal')">关闭</button>
+      <button class="btn btn-green" onclick="closeModal('preview-modal');publishPost()">🚀 确认发布</button>
     </div>
   </div>
 </div>
@@ -359,348 +392,386 @@
 <div id="toast"></div>
 
 <script>
-// ════════════════════════════════════════════
-//  State
-// ════════════════════════════════════════════
-let cfg = { owner:'', repo:'', branch:'main', path:'content.json', token:'' };
-let docData = null;
-let remoteSha = null;   // current file SHA on GitHub
-let conflictRemote = null;
-let editingId = null;
-let isAdding = false;
-let localHistory = [];
+// ══════════════════════════════════════════
+//  Config & State
+// ══════════════════════════════════════════
+let cfg = { owner:'', repo:'', branch:'main', token:'', title:'TeamBlog' };
+let allPosts = [];      // { id, title, category, author, date, excerpt, cover, emoji, tags, filename }
+let currentCat = '';
+let editingPostId = null;
+const API = 'https://api.github.com';
 
-const DEFAULT_DOC = {
-  title:"协作文档示例",
-  description:"这是一个存储在 GitHub 上的协作文档，所有成员可通过浏览器直接编辑并推送更新。",
-  tags:["GitHub","协作","文档"],
-  sections:[
-    {id:"s1",icon:"📁",title:"准备工作",content:"• 创建 GitHub 仓库（Public）\n• 启用 GitHub Pages\n• 将 index.html 上传到仓库根目录\n• 获取 Personal Access Token",image:"",imageCaption:"",author:"Admin",updatedAt:new Date().toISOString()},
-    {id:"s2",icon:"✏️",title:"编辑内容",content:"• 点击任意章节的「编辑」按钮修改内容\n• 支持添加图片 URL、编辑者署名\n• 内容实时保存在浏览器本地\n• 编辑完成后点击「推送到 GitHub」",image:"",imageCaption:"",author:"Admin",updatedAt:new Date().toISOString()},
-    {id:"s3",icon:"🔄",title:"多人协作流程",content:"• 每位协作者输入自己的 Token 连接仓库\n• 编辑前先「拉取」最新内容\n• 编辑后「推送」到 GitHub\n• GitHub Pages 自动重新部署（约1分钟）",image:"",imageCaption:"",author:"Admin",updatedAt:new Date().toISOString()}
-  ]
+const CAT_MAP = {
+  announce:{ label:'公告', icon:'📢', cls:'cat-announce' },
+  tech:    { label:'技术', icon:'💻', cls:'cat-tech' },
+  life:    { label:'生活', icon:'🌱', cls:'cat-life' },
+  share:   { label:'分享', icon:'🔗', cls:'cat-share' },
+  discuss: { label:'讨论', icon:'💬', cls:'cat-discuss' },
+  other:   { label:'其他', icon:'📌', cls:'cat-other' },
 };
+const COLORS = ['#6366f1','#ec4899','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ef4444','#06b6d4'];
+function authorColor(name){ let h=0; for(let c of name) h=(h*31+c.charCodeAt(0))&0xffff; return COLORS[h%COLORS.length]; }
 
-// ════════════════════════════════════════════
-//  Config
-// ════════════════════════════════════════════
-function loadConfig(){
-  const saved = JSON.parse(localStorage.getItem('gh_cfg')||'{}');
-  if(saved.owner) document.getElementById('cfg-owner').value = saved.owner;
-  if(saved.repo)  document.getElementById('cfg-repo').value  = saved.repo;
-  if(saved.branch)document.getElementById('cfg-branch').value= saved.branch;
-  if(saved.path)  document.getElementById('cfg-path').value  = saved.path;
-  if(saved.token) document.getElementById('cfg-token').value = saved.token;
-  showToast('↩ 已读取保存的配置');
+// ══════════════════════════════════════════
+//  GitHub API
+// ══════════════════════════════════════════
+function ghH(){ return {'Authorization':'token '+cfg.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'}; }
+async function ghGet(path){
+  const r = await fetch(API+path,{headers:ghH()});
+  if(!r.ok){ const e=await r.json().catch(()=>({message:r.status})); throw new Error(e.message||r.status); }
+  return r.json();
 }
-function saveConfig(){
+async function ghPut(path,body){
+  const r = await fetch(API+path,{method:'PUT',headers:ghH(),body:JSON.stringify(body)});
+  if(!r.ok){ const e=await r.json().catch(()=>({message:r.status})); throw new Error(e.message||r.status); }
+  return r.json();
+}
+async function ghDelete(path,body){
+  const r = await fetch(API+path,{method:'DELETE',headers:ghH(),body:JSON.stringify(body)});
+  if(!r.ok){ const e=await r.json().catch(()=>({message:r.status})); throw new Error(e.message||r.status); }
+  return r.json();
+}
+
+// ══════════════════════════════════════════
+//  Connect & Load
+// ══════════════════════════════════════════
+function loadSavedCfg(){
+  const s = JSON.parse(localStorage.getItem('tb_cfg')||'{}');
+  ['owner','repo','branch','token','title'].forEach(k=>{ if(s[k]) document.getElementById('cfg-'+k).value=s[k]; });
+  toast('↩ 已读取保存的配置');
+}
+function saveCfgFromBanner(){
   cfg.owner  = document.getElementById('cfg-owner').value.trim();
   cfg.repo   = document.getElementById('cfg-repo').value.trim();
   cfg.branch = document.getElementById('cfg-branch').value.trim()||'main';
-  cfg.path   = document.getElementById('cfg-path').value.trim()||'content.json';
   cfg.token  = document.getElementById('cfg-token').value.trim();
-  localStorage.setItem('gh_cfg', JSON.stringify(cfg));
+  cfg.title  = document.getElementById('cfg-title').value.trim()||'TeamBlog';
+  localStorage.setItem('tb_cfg', JSON.stringify(cfg));
 }
-
-// ════════════════════════════════════════════
-//  GitHub API helpers
-// ════════════════════════════════════════════
-const API = 'https://api.github.com';
-function ghHeaders(){
-  return { 'Authorization':'token '+cfg.token, 'Accept':'application/vnd.github.v3+json', 'Content-Type':'application/json' };
-}
-async function ghGet(path){
-  const r = await fetch(API+path, { headers: ghHeaders() });
-  if(!r.ok){ const e=await r.json(); throw new Error(e.message||r.status); }
-  return r.json();
-}
-async function ghPut(path, body){
-  const r = await fetch(API+path, { method:'PUT', headers:ghHeaders(), body:JSON.stringify(body) });
-  if(!r.ok){ const e=await r.json(); throw new Error(e.message||r.status); }
-  return r.json();
-}
-
-// ════════════════════════════════════════════
-//  Connect & Pull
-// ════════════════════════════════════════════
-async function connectGitHub(){
-  saveConfig();
-  if(!cfg.owner||!cfg.repo||!cfg.token){ showToast('❌ 请填写完整配置','error'); return; }
-  showLoading('正在连接 GitHub...');
+async function connectGH(){
+  saveCfgFromBanner();
+  if(!cfg.owner||!cfg.repo||!cfg.token){ toast('❌ 请填写完整配置','err'); return; }
+  showLoad('正在连接 GitHub...');
   try {
-    await pullFromGitHub(true);
-    document.getElementById('config-banner').classList.add('connected');
-    document.getElementById('config-banner').querySelector('h2').textContent = '✅ 已连接 GitHub 仓库';
-    setStatus('green','已连接 '+cfg.owner);
-    document.getElementById('status-repo').textContent = cfg.owner+'/'+cfg.repo;
-    showToast('✅ 连接成功，内容已加载','success');
-  } catch(e){
-    showToast('❌ 连接失败：'+e.message,'error');
-  } finally { hideLoading(); }
+    await ghGet(`/repos/${cfg.owner}/${cfg.repo}`);
+    setStatus('on','已连接 '+cfg.owner);
+    document.getElementById('txt-repo').textContent = cfg.owner+'/'+cfg.repo;
+    document.getElementById('tb-title').textContent = cfg.title;
+    document.getElementById('setup-banner').classList.add('done');
+    document.getElementById('setup-banner').querySelector('.setup-title').textContent = '✅ 已连接：'+cfg.owner+'/'+cfg.repo;
+    await loadPosts(false);
+    toast('✅ 连接成功','ok');
+  } catch(e){ toast('❌ 连接失败：'+e.message,'err'); }
+  finally { hideLoad(); }
 }
 
-async function pullFromGitHub(silent=false){
-  if(!cfg.token){ showToast('❌ 请先配置 GitHub Token','error'); return; }
-  if(!silent) showLoading('正在从 GitHub 拉取...');
+async function loadPosts(showMsg=true){
+  if(!cfg.token){ toast('❌ 请先连接 GitHub','err'); return; }
+  if(showMsg) showLoad('正在加载帖子...');
   try {
-    const data = await ghGet(`/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}?ref=${cfg.branch}`);
-    remoteSha = data.sha;
-    const content = JSON.parse(atob(data.content.replace(/\n/g,'')));
-    // Check conflict
-    if(docData && !silent){
-      const localStr = JSON.stringify(docData);
-      const remoteStr = JSON.stringify(content);
-      if(localStr !== remoteStr){
-        conflictRemote = content;
-        document.getElementById('conflict-remote').textContent = JSON.stringify(content,null,2).slice(0,800)+'...';
-        document.getElementById('conflict-local').textContent  = JSON.stringify(docData,null,2).slice(0,800)+'...';
-        document.getElementById('conflict-modal').classList.remove('hidden');
-        if(!silent) hideLoading();
-        return;
-      }
-    }
-    docData = content;
-    addHistory('拉取', '从 GitHub 拉取最新内容');
-    render();
-    if(!silent) showToast('⬇ 已拉取最新内容','success');
-  } catch(e){
-    if(e.message.includes('Not Found')){
-      // File doesn't exist yet, init with default
-      docData = JSON.parse(JSON.stringify(DEFAULT_DOC));
-      remoteSha = null;
-      render();
-      if(!silent) showToast('📄 文件不存在，已初始化默认文档');
-    } else {
+    // List posts/ directory
+    let files;
+    try {
+      files = await ghGet(`/repos/${cfg.owner}/${cfg.repo}/contents/posts?ref=${cfg.branch}`);
+    } catch(e) {
+      if(e.message.includes('Not Found')){ allPosts=[]; renderList(); updateCounts(); if(showMsg){hideLoad();toast('📂 posts/ 目录不存在，发布第一篇帖子后自动创建');} return; }
       throw e;
     }
-  } finally { if(!silent) hideLoading(); }
+    const jsonFiles = files.filter(f=>f.name.endsWith('.json')&&f.name!=='index.json');
+    // Load each post meta (parallel, limit 20)
+    const toLoad = jsonFiles.slice(0,60);
+    const results = await Promise.allSettled(toLoad.map(f=>ghGet(`/repos/${cfg.owner}/${cfg.repo}/contents/posts/${f.name}?ref=${cfg.branch}`)));
+    allPosts = [];
+    results.forEach((r,i)=>{
+      if(r.status==='fulfilled'){
+        try {
+          const data = JSON.parse(atob(r.value.content.replace(/\n/g,'')));
+          data._sha = r.value.sha;
+          data._filename = toLoad[i].name;
+          allPosts.push(data);
+        } catch(e){}
+      }
+    });
+    allPosts.sort((a,b)=>new Date(b.date)-new Date(a.date));
+    renderList(); updateCounts();
+    if(showMsg){ hideLoad(); toast(`✅ 已加载 ${allPosts.length} 篇帖子`,'ok'); }
+  } catch(e){ if(showMsg) toast('❌ 加载失败：'+e.message,'err'); }
+  finally { if(showMsg) hideLoad(); else hideLoad(); }
 }
 
-function resolveConflict(choice){
-  if(choice==='remote'){ docData = conflictRemote; render(); showToast('✅ 已使用远端版本'); }
-  else { showToast('⚠️ 将强制推送本地版本'); pushToGitHub(true); }
-  conflictRemote = null;
-  closeModal('conflict-modal');
-}
+// ══════════════════════════════════════════
+//  Publish Post
+// ══════════════════════════════════════════
+async function publishPost(){
+  const title   = document.getElementById('w-title').value.trim();
+  const cat     = document.getElementById('w-cat').value;
+  const author  = document.getElementById('w-author').value.trim()||'匿名';
+  const cover   = document.getElementById('w-cover').value.trim();
+  const emoji   = document.getElementById('w-emoji').value.trim()||'📝';
+  const content = document.getElementById('w-content').value.trim();
+  const tagsRaw = document.getElementById('w-tags').value.trim();
+  if(!title){ toast('❌ 请填写标题','err'); return; }
+  if(!content){ toast('❌ 请填写内容','err'); return; }
+  if(!cfg.token){ toast('❌ 请先连接 GitHub','err'); return; }
 
-// ════════════════════════════════════════════
-//  Push
-// ════════════════════════════════════════════
-async function pushToGitHub(force=false){
-  if(!cfg.token){ showToast('❌ 请先配置 GitHub Token','error'); return; }
-  if(!docData){ showToast('❌ 没有内容可推送','error'); return; }
-  showLoading('正在推送到 GitHub...');
+  const tags = tagsRaw ? tagsRaw.split(',').map(t=>t.trim()).filter(Boolean) : [];
+  const now = new Date().toISOString();
+  const id = editingPostId || ('post-'+Date.now());
+  const filename = id+'.json';
+  const excerpt = content.replace(/[#*`>\[\]!]/g,'').slice(0,120)+'...';
+
+  const postObj = { id, title, category:cat, author, date:now, cover, emoji, content, excerpt, tags };
+
+  showLoad('正在发布到 GitHub...');
   try {
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(docData,null,2))));
-    const author = docData.sections.length ? (docData.sections[docData.sections.length-1].author||'CollabDocs') : 'CollabDocs';
+    const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(postObj,null,2))));
     const body = {
-      message: `docs: update by ${author} at ${new Date().toLocaleString('zh-CN')}`,
-      content,
+      message: `post: ${title} by ${author}`,
+      content: b64,
       branch: cfg.branch
     };
-    if(remoteSha) body.sha = remoteSha;
-    const res = await ghPut(`/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`, body);
-    remoteSha = res.content.sha;
-    addHistory('推送', `推送到 GitHub，commit: ${res.commit.sha.slice(0,7)}`);
-    const now = new Date().toLocaleString('zh-CN');
-    document.getElementById('status-lastpush').textContent = '最后推送：'+now;
-    showToast('✅ 已推送到 GitHub，Pages 将在约1分钟后更新','success');
-  } catch(e){
-    if(e.message.includes('conflict')||e.message.includes('sha')){
-      showToast('⚠️ 推送冲突，请先拉取最新内容','error');
-    } else {
-      showToast('❌ 推送失败：'+e.message,'error');
+    // If editing, get SHA
+    if(editingPostId){
+      const existing = allPosts.find(p=>p.id===editingPostId);
+      if(existing?._sha) body.sha = existing._sha;
     }
-  } finally { hideLoading(); }
+    const res = await ghPut(`/repos/${cfg.owner}/${cfg.repo}/contents/posts/${filename}`, body);
+    postObj._sha = res.content.sha;
+    postObj._filename = filename;
+
+    // Update local list
+    const idx = allPosts.findIndex(p=>p.id===id);
+    if(idx>=0) allPosts[idx]=postObj; else allPosts.unshift(postObj);
+    allPosts.sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+    renderList(); updateCounts();
+    closeModal('write-modal');
+    editingPostId = null;
+    toast('🚀 发布成功！GitHub Pages 约1分钟后更新','ok');
+    // Auto open post
+    showPost(id);
+  } catch(e){ toast('❌ 发布失败：'+e.message,'err'); }
+  finally { hideLoad(); }
 }
 
-// ════════════════════════════════════════════
-//  Render
-// ════════════════════════════════════════════
-function render(){
-  if(!docData) return;
-  document.getElementById('ph-title').textContent = docData.title;
-  document.getElementById('tb-title').textContent = docData.title;
-  document.getElementById('ph-desc').textContent  = docData.description;
-  document.getElementById('sync-doc-title').textContent = docData.title;
-  document.getElementById('sync-meta').textContent = ` · ${docData.sections.length} 个章节`;
-  const metaEl = document.getElementById('ph-meta');
-  metaEl.innerHTML = (docData.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('');
+// ══════════════════════════════════════════
+//  Delete Post
+// ══════════════════════════════════════════
+async function deletePost(id){
+  if(!confirm('确定删除这篇帖子？此操作不可撤销。')) return;
+  const post = allPosts.find(p=>p.id===id);
+  if(!post||!post._sha){ toast('❌ 找不到帖子信息','err'); return; }
+  showLoad('正在删除...');
+  try {
+    await ghDelete(`/repos/${cfg.owner}/${cfg.repo}/contents/posts/${post._filename}`,{
+      message:`delete: ${post.title}`, sha:post._sha, branch:cfg.branch
+    });
+    allPosts = allPosts.filter(p=>p.id!==id);
+    renderList(); updateCounts();
+    showList();
+    toast('🗑 帖子已删除','ok');
+  } catch(e){ toast('❌ 删除失败：'+e.message,'err'); }
+  finally { hideLoad(); }
+}
 
-  // Sections
-  const c = document.getElementById('sections-container');
-  c.innerHTML = docData.sections.map((s,i)=>`
-    <div class="section-card" id="card-${s.id}">
-      <div class="sc-header">
-        <div class="step-num">${i+1}</div>
-        <div class="sc-title">${s.icon||'📌'} ${esc(s.title)}</div>
-        <div class="sc-actions">
-          <button class="btn btn-outline btn-xs" onclick="openEditSection('${s.id}')">✏️ 编辑</button>
-          <button class="btn btn-red btn-xs" onclick="deleteSection('${s.id}')">🗑</button>
+// ══════════════════════════════════════════
+//  Render List
+// ══════════════════════════════════════════
+function renderList(){
+  const q = (document.getElementById('search-input').value||'').toLowerCase();
+  const sort = document.getElementById('sort-select').value;
+  let posts = allPosts.filter(p=>{
+    if(currentCat && p.category!==currentCat) return false;
+    if(q && !p.title.toLowerCase().includes(q) && !p.content.toLowerCase().includes(q) && !(p.author||'').toLowerCase().includes(q)) return false;
+    return true;
+  });
+  if(sort==='oldest') posts = [...posts].sort((a,b)=>new Date(a.date)-new Date(b.date));
+  else if(sort==='author') posts = [...posts].sort((a,b)=>(a.author||'').localeCompare(b.author||''));
+
+  const catInfo = currentCat ? CAT_MAP[currentCat] : null;
+  document.getElementById('view-title').textContent = catInfo ? catInfo.icon+' '+catInfo.label : '🏠 全部帖子';
+
+  const grid = document.getElementById('posts-grid');
+  if(!posts.length){
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">${catInfo?catInfo.icon:'📰'}</div><p>${q?'没有找到匹配的帖子':'暂无帖子，点击「写帖子」发布第一篇！'}</p></div>`;
+    return;
+  }
+  grid.innerHTML = posts.map(p=>{
+    const cat = CAT_MAP[p.category]||CAT_MAP.other;
+    const color = authorColor(p.author||'?');
+    const initial = (p.author||'?')[0].toUpperCase();
+    return `
+    <div class="post-card" onclick="showPost('${p.id}')">
+      <div class="post-card-cover">
+        ${p.cover?`<img src="${esc(p.cover)}" onerror="this.style.display='none'"/>`:''}
+        <span class="cover-emoji">${p.emoji||'📝'}</span>
+      </div>
+      <div class="post-card-body">
+        <span class="post-card-cat ${cat.cls}">${cat.icon} ${cat.label}</span>
+        <div class="post-card-title">${esc(p.title)}</div>
+        <div class="post-card-excerpt">${esc(p.excerpt||'')}</div>
+        <div class="post-card-footer">
+          <div class="avatar-sm" style="background:${color}">${initial}</div>
+          <div class="post-card-author">${esc(p.author||'匿名')}</div>
+          <div class="post-card-date">${fmtDate(p.date)}</div>
         </div>
       </div>
-      <div class="sc-body">
-        <div class="sc-content">${esc(s.content)}</div>
-        ${s.image
-          ? `<div class="sc-image"><img src="${s.image}" alt="${esc(s.imageCaption||'')}"/><div class="sc-image-caption">${esc(s.imageCaption||'')}</div></div>`
-          : `<div class="sc-img-placeholder" onclick="openEditSection('${s.id}')">🖼️ 点击编辑以添加图片</div>`
-        }
-        <div class="sc-meta">
-          <span>👤 ${esc(s.author||'未知')}</span>
-          <span>🕐 ${fmtDate(s.updatedAt)}</span>
-        </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+//  Show Post Detail
+// ══════════════════════════════════════════
+function showPost(id){
+  const p = allPosts.find(x=>x.id===id);
+  if(!p) return;
+  const cat = CAT_MAP[p.category]||CAT_MAP.other;
+  const color = authorColor(p.author||'?');
+  const initial = (p.author||'?')[0].toUpperCase();
+  const tags = (p.tags||[]).map(t=>`<span class="tag" style="background:#f1f5f9;color:#475569">${esc(t)}</span>`).join('');
+  document.getElementById('post-detail-content').innerHTML = `
+    <span class="post-detail-cat ${cat.cls}">${cat.icon} ${cat.label}</span>
+    <div class="post-detail-title">${esc(p.title)}</div>
+    <div class="post-detail-meta">
+      <div style="display:flex;align-items:center;gap:6px">
+        <div class="avatar-sm" style="background:${color}">${initial}</div>
+        <strong>${esc(p.author||'匿名')}</strong>
       </div>
+      <span>🕐 ${fmtDateFull(p.date)}</span>
+      ${tags?`<div style="display:flex;gap:4px;flex-wrap:wrap">${tags}</div>`:''}
     </div>
-  `).join('');
-
-  // Sidebar nav
-  const nav = document.getElementById('sb-nav');
-  nav.innerHTML = `<div class="sb-section">文档导航</div>`+
-    docData.sections.map((s,i)=>`
-      <div class="sb-item" onclick="scrollTo('${s.id}')">
-        <span class="ico">${s.icon||'📌'}</span>
-        <span>步骤${i+1}: ${esc(s.title)}</span>
-      </div>
-    `).join('')+
-    `<div class="sb-section" style="margin-top:10px">操作</div>
-     <div class="sb-item" onclick="openAddSection()"><span class="ico">➕</span>新增章节</div>
-     <div class="sb-item" onclick="pullFromGitHub()"><span class="ico">⬇</span>拉取最新</div>
-     <div class="sb-item" onclick="pushToGitHub()"><span class="ico">⬆</span>推送到 GitHub</div>
-     <div class="sb-item" onclick="openHowTo()"><span class="ico">❓</span>使用帮助</div>`;
+    ${p.cover?`<img class="post-detail-cover" src="${esc(p.cover)}" onerror="this.style.display='none'"/>`:''}
+    <div class="post-detail-body">${renderMarkdown(p.content||'')}</div>
+    <div class="post-detail-actions">
+      <button class="btn btn-outline btn-sm" onclick="openEdit('${p.id}')">✏️ 编辑</button>
+      <button class="btn btn-red btn-sm" onclick="deletePost('${p.id}')">🗑 删除</button>
+      <button class="btn btn-outline btn-sm" onclick="showList()">← 返回列表</button>
+    </div>
+  `;
+  document.getElementById('view-list').style.display='none';
+  document.getElementById('view-post').style.display='block';
+  document.getElementById('view-post').scrollTop=0;
 }
 
-// ════════════════════════════════════════════
-//  Section CRUD
-// ════════════════════════════════════════════
-function openEditSection(id){
-  const s = docData.sections.find(x=>x.id===id);
-  if(!s) return;
-  editingId=id; isAdding=false;
-  document.getElementById('edit-modal-title').textContent='编辑章节';
-  document.getElementById('em-icon').value    = s.icon||'📌';
-  document.getElementById('em-title').value   = s.title;
-  document.getElementById('em-content').value = s.content;
-  document.getElementById('em-image').value   = s.image||'';
-  document.getElementById('em-caption').value = s.imageCaption||'';
-  document.getElementById('em-author').value  = s.author||'';
-  document.getElementById('edit-modal').classList.remove('hidden');
-}
-function openAddSection(){
-  editingId=null; isAdding=true;
-  document.getElementById('edit-modal-title').textContent='新增章节';
-  ['em-icon','em-title','em-content','em-image','em-caption','em-author'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('em-icon').value='📌';
-  document.getElementById('edit-modal').classList.remove('hidden');
-}
-function saveSection(){
-  const title   = document.getElementById('em-title').value.trim();
-  const content = document.getElementById('em-content').value.trim();
-  const icon    = document.getElementById('em-icon').value.trim()||'📌';
-  const image   = document.getElementById('em-image').value.trim();
-  const imageCaption = document.getElementById('em-caption').value.trim();
-  const author  = document.getElementById('em-author').value.trim()||'匿名';
-  if(!title){ showToast('❌ 请输入章节标题','error'); return; }
-  if(!docData) docData = JSON.parse(JSON.stringify(DEFAULT_DOC));
-  if(isAdding){
-    docData.sections.push({id:'s'+Date.now(),icon,title,content,image,imageCaption,author,updatedAt:new Date().toISOString()});
-    addHistory('新增章节',title);
-  } else {
-    const s = docData.sections.find(x=>x.id===editingId);
-    if(s) Object.assign(s,{icon,title,content,image,imageCaption,author,updatedAt:new Date().toISOString()});
-    addHistory('编辑章节',title);
-  }
-  render(); closeModal('edit-modal');
-  showToast(isAdding?'✅ 章节已添加（记得推送到 GitHub）':'✅ 章节已更新（记得推送到 GitHub）');
-}
-function deleteSection(id){
-  if(!confirm('确定删除此章节？')) return;
-  const s = docData.sections.find(x=>x.id===id);
-  docData.sections = docData.sections.filter(x=>x.id!==id);
-  addHistory('删除章节', s?.title||id);
-  render(); showToast('🗑 章节已删除（记得推送到 GitHub）');
-}
-function scrollTo(id){
-  const el = document.getElementById('card-'+id);
-  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+function showList(){
+  document.getElementById('view-list').style.display='';
+  document.getElementById('view-post').style.display='none';
 }
 
-// ════════════════════════════════════════════
-//  Header edit
-// ════════════════════════════════════════════
-function openEditHeader(){
-  if(!docData){ showToast('❌ 请先加载文档','error'); return; }
-  document.getElementById('hm-title').value = docData.title;
-  document.getElementById('hm-desc').value  = docData.description;
-  document.getElementById('hm-tags').value  = (docData.tags||[]).join(', ');
-  document.getElementById('header-modal').classList.remove('hidden');
-}
-function saveHeader(){
-  docData.title       = document.getElementById('hm-title').value.trim()||docData.title;
-  docData.description = document.getElementById('hm-desc').value.trim();
-  docData.tags        = document.getElementById('hm-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
-  addHistory('编辑标题', docData.title);
-  render(); closeModal('header-modal'); showToast('✅ 标题已更新（记得推送）');
-}
-
-// ════════════════════════════════════════════
-//  History
-// ════════════════════════════════════════════
-function addHistory(action, detail){
-  localHistory.unshift({ action, detail, time: new Date().toISOString() });
-  if(localHistory.length>50) localHistory.pop();
-  localStorage.setItem('gh_history', JSON.stringify(localHistory));
-}
-function openHistory(){
-  const saved = JSON.parse(localStorage.getItem('gh_history')||'[]');
-  localHistory = saved;
-  const el = document.getElementById('history-list');
-  if(!saved.length){ el.innerHTML='<p style="color:var(--muted);font-size:13px">暂无历史记录</p>'; }
-  else {
-    el.innerHTML = saved.map(h=>`
-      <div class="history-item">
-        <strong>${esc(h.action)}</strong>：${esc(h.detail)}
-        <div class="history-item-meta"><span>🕐 ${fmtDate(h.time)}</span></div>
-      </div>
-    `).join('');
-  }
-  document.getElementById('history-modal').classList.remove('hidden');
+// ══════════════════════════════════════════
+//  Edit Post
+// ══════════════════════════════════════════
+function openEdit(id){
+  const p = allPosts.find(x=>x.id===id);
+  if(!p) return;
+  editingPostId = id;
+  document.getElementById('write-modal-title').textContent = '✏️ 编辑帖子';
+  document.getElementById('w-title').value   = p.title||'';
+  document.getElementById('w-cat').value     = p.category||'other';
+  document.getElementById('w-author').value  = p.author||'';
+  document.getElementById('w-cover').value   = p.cover||'';
+  document.getElementById('w-emoji').value   = p.emoji||'📝';
+  document.getElementById('w-content').value = p.content||'';
+  document.getElementById('w-tags').value    = (p.tags||[]).join(', ');
+  document.getElementById('write-modal').classList.remove('hidden');
 }
 
-// ════════════════════════════════════════════
-//  Helpers
-// ════════════════════════════════════════════
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function fmtDate(iso){ try{ return new Date(iso).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}); }catch{ return iso||'—'; } }
-function setStatus(color, text){ const d=document.getElementById('dot-conn'); d.className='dot '+color; document.getElementById('status-conn').textContent=text; }
-function showLoading(msg='加载中...'){ document.getElementById('loading-msg').textContent=msg; document.getElementById('loading-overlay').classList.remove('hidden'); }
-function hideLoading(){ document.getElementById('loading-overlay').classList.add('hidden'); }
-function closeModal(id){ document.getElementById(id).classList.add('hidden'); }
-function openHowTo(){ document.getElementById('howto-modal').classList.remove('hidden'); }
-
-let toastTimer;
-function showToast(msg, type=''){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.className=''; if(type) t.classList.add(type);
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>t.classList.remove('show'), 3000);
+function openWrite(){
+  editingPostId = null;
+  document.getElementById('write-modal-title').textContent = '✏️ 写新帖子';
+  ['w-title','w-cover','w-content','w-tags'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('w-emoji').value = '📝';
+  document.getElementById('w-cat').value = 'other';
+  const savedAuthor = localStorage.getItem('tb_author')||'';
+  document.getElementById('w-author').value = savedAuthor;
+  document.getElementById('write-modal').classList.remove('hidden');
 }
 
-// ════════════════════════════════════════════
-//  Init
-// ════════════════════════════════════════════
-document.getElementById('toggle-sb').addEventListener('click',()=>document.getElementById('sidebar').classList.toggle('collapsed'));
-document.querySelectorAll('.overlay').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) m.classList.add('hidden'); }));
+// ══════════════════════════════════════════
+//  Preview
+// ══════════════════════════════════════════
+function previewPost(){
+  const title = document.getElementById('w-title').value||'（无标题）';
+  const content = document.getElementById('w-content').value||'';
+  const author = document.getElementById('w-author').value||'匿名';
+  const cat = document.getElementById('w-cat').value;
+  const catInfo = CAT_MAP[cat]||CAT_MAP.other;
+  document.getElementById('preview-content').innerHTML = `
+    <span class="post-detail-cat ${catInfo.cls}" style="margin-bottom:10px;display:inline-flex">${catInfo.icon} ${catInfo.label}</span>
+    <div style="font-size:22px;font-weight:800;margin-bottom:10px">${esc(title)}</div>
+    <div style="color:var(--muted);font-size:13px;margin-bottom:18px">👤 ${esc(author)} · ${fmtDateFull(new Date().toISOString())}</div>
+    <div class="post-detail-body">${renderMarkdown(content)}</div>
+  `;
+  document.getElementById('preview-modal').classList.remove('hidden');
+}
 
-// Auto-load saved config
-(function init(){
-  const saved = JSON.parse(localStorage.getItem('gh_cfg')||'{}');
-  if(saved.owner){ Object.assign(cfg,saved); loadConfig(); }
-  localHistory = JSON.parse(localStorage.getItem('gh_history')||'[]');
-  // Show default doc as placeholder
-  docData = JSON.parse(JSON.stringify(DEFAULT_DOC));
-  render();
-})();
-</script>
-</body>
-</html>
+// ══════════════════════════════════════════
+//  Markdown renderer (simple)
+// ══════════════════════════════════════════
+function renderMarkdown(md){
+  let html = esc(md);
+  // Headers
+  html = html.replace(/^### (.+)$/gm,'<h3 style="font-size:16px;font-weight:700;margin:16px 0 6px">$1</h3>');
+  html = html.replace(/^## (.+)$/gm,'<h2 style="font-size:19px;font-weight:700;margin:20px 0 8px">$1</h2>');
+  html = html.replace(/^# (.+)$/gm,'<h1 style="font-size:22px;font-weight:800;margin:22px 0 10px">$1</h1>');
+  // Bold / Italic
+  html = html.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  html = html.replace(/\*(.+?)\*/g,'<em>$1</em>');
+  // Code block
+  html = html.replace(/```([\s\S]*?)```/g,'<pre style="background:#0f172a;color:#e2e8f0;padding:14px;border-radius:8px;overflow-x:auto;font-size:13px;margin:12px 0"><code>$1</code></pre>');
+  // Inline code
+  html = html.replace(/`(.+?)`/g,'<code style="background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:13px">$1</code>');
+  // Blockquote
+  html = html.replace(/^&gt; (.+)$/gm,'<blockquote style="border-left:3px solid var(--primary);padding:6px 14px;color:var(--muted);margin:8px 0;background:var(--primary-light);border-radius:0 6px 6px 0">$1</blockquote>');
+  // Images
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img src="$2" alt="$1" style="max-width:100%;border-radius:8px;margin:10px 0"/>');
+  // Links
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" style="color:var(--primary);text-decoration:underline">$1</a>');
+  // Lists
+  html = html.replace(/^- (.+)$/gm,'<li style="margin:3px 0;padding-left:4px">$1</li>');
+  html = html.replace(/(<li[^>]*>.*<\/li>\n?)+/g,'<ul style="padding-left:20px;margin:8px 0">$&</ul>');
+  // Line breaks
+  html = html.replace(/\n\n/g,'</p><p style="margin:8px 0">');
+  html = html.replace(/\n/g,'<br/>');
+  return '<p style="margin:8px 0">'+html+'</p>';
+}
+
+// ══════════════════════════════════════════
+//  Filter & Count
+// ══════════════════════════════════════════
+function filterCat(cat){
+  currentCat = cat;
+  document.querySelectorAll('.sb-item').forEach(el=>el.classList.remove('active'));
+  const id = cat ? 'cat-'+cat : 'cat-all';
+  const el = document.getElementById(id);
+  if(el) el.classList.add('active');
+  showList(); renderList();
+}
+function updateCounts(){
+  document.getElementById('cnt-all').textContent = allPosts.length;
+  Object.keys(CAT_MAP).forEach(k=>{
+    const el = document.getElementById('cnt-'+k);
+    if(el) el.textContent = allPosts.filter(p=>p.category===k).length;
+  });
+}
+
+// ══════════════════════════════════════════
+//  Setup Modal
+// ══════════════════════════════════════════
+function openSetup(){
+  document.getElementById('sm-owner').value  = cfg.owner;
+  document.getElementById('sm-repo').value   = cfg.repo;
+  document.getElementById('sm-branch').value = cfg.branch;
+  document.getElementById('sm-title').value  = cfg.title;
+  document.getElementById('sm-token').value  = cfg.token;
+  document.getElementById('setup-modal').classList.remove('hidden');
+}
+async function saveSetupModal(){
+  cfg.owner  = document.getElementById('sm-owner').value.trim();
+  cfg.repo   = document.getElementById('sm-repo').value.trim();
+  cfg.branch = document.getElementById('sm-branch').value.trim()||'main';
+  cfg.title  = document.getElementById('sm-title').value.trim()||'TeamBlog';
+  cfg.token  = document.getElementById('sm-token').value.trim();
+  localStorage.setItem('tb_cfg', JSON.stringify(cfg));
+  
