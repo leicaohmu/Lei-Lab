@@ -1,10 +1,10 @@
 {
   "title": "Centos终端科学上网教程",
   "author": "曹雷",
-  "content": "# 安装 V2RayA（CentOS）\n## 第一步：安装 V2RayA\n下载地址为：`https://sourceforge.net/projects/v2raya.mirror/files/v2.2.7.2/installer_redhat_x64_2.2.7.2.rpm/download`，可以本地下载再传输到服务器。重命名为v2raya.rpm，并运行：`sudo rpm -i v2raya.rpm`。\n## 第二步：写入配置文件\nsudo mkdir -p /etc/default\n\nsudo tee /etc/default/v2raya <<EOF\nV2RAYA_ADDRESS=0.0.0.0:8067\nEOF\n\ncat /etc/default/v2raya\n## 第三步：启动服务\nsudo systemctl daemon-reload\nsudo systemctl restart v2raya\n## 第四步：验证端口\nsleep 2\nsudo ss -tlnp | grep 8067\n\n最后就可以访问 http://192.168.97.85:8067 （这是我的服务器地址和端口，各位可以按照自己的去写），就可以看到控制面板了，导入自己购买的订阅链接(v2ray版本)，在终端中试着访问一下谷歌，`ping www.google.cn`，可以看到已经成功了。",
+  "content": "# 安装 V2RayA（CentOS）\n## 第一步：安装 V2RayA\n下载地址为：`https://sourceforge.net/projects/v2raya.mirror/files/v2.2.7.2/installer_redhat_x64_2.2.7.2.rpm/download`，可以本地下载再传输到服务器。重命名为v2raya.rpm，并运行：`sudo rpm -i v2raya.rpm`。\n## 第二步：写入配置文件\nsudo mkdir -p /etc/default\n\nsudo tee /etc/default/v2raya <<EOF\nV2RAYA_ADDRESS=0.0.0.0:8067\nEOF\n\ncat /etc/default/v2raya\n## 第三步：启动服务\nsudo systemctl daemon-reload\nsudo systemctl restart v2raya\n## 第四步：验证端口\nsleep 2\nsudo ss -tlnp | grep 8067\n## 第五步：终端全局走代理\nexport http_proxy=http://127.0.0.1:20171\nexport https_proxy=http://127.0.0.1:20171\n之后当前终端窗口的所有命令都会走代理。\n## 第六步：写入配置文件，永久生效\necho 'export http_proxy=http://127.0.0.1:20171' >> ~/.bashrc\necho 'export https_proxy=http://127.0.0.1:20171' >> ~/.bashrc\nsource ~/.bashrc\n\n最后就可以访问 http://192.168.97.85:8067 （这是我的服务器地址和端口，各位可以按照自己的去写），就可以看到控制面板了，导入自己购买的订阅链接(v2ray版本)，在终端中试着访问一下谷歌，`curl www.google.com`，可以看到已经成功了。",
   "category": "tech",
   "date": "2026-04-09T13:40:45.265Z",
-  "updated": "2026-04-09T13:41:08.561Z",
+  "updated": "2026-04-10T13:02:47.184Z",
   "emoji": "📄",
   "cover": "",
   "tags": [
