@@ -1,0 +1,14 @@
+{
+  "title": "HistoX库开发与发布完整说明",
+  "author": "曹雷",
+  "content": "# histox 开发与发布完整说明\n\n## 项目结构说明\n\n| 文件 | 作用 |\n|------|------|\n| `setup.py` | 包配置入口，版本号由 git tag 自动读取（`use_scm_version=True`） |\n| `setup.cfg` | 构建系统声明，无需手动维护版本 |\n| `docs/source/conf.py` | Sphinx 文档配置，`release` 字段需手动同步 |\n| `docs/source/*.rst` | 文档页面，新增子模块时需手动添加 |\n| `docs/source/index.rst` | 文档目录，新增子模块时需更新 toctree |\n\n---\n\n## 一、新增功能标准流程\n\n### 第一步：写代码\n完全正常写，无任何限制，torch/tf 等重依赖随便 import：\n```python\nimport torch\nimport torch.nn as nn\n\nclass MyNewModel(nn.Module):\n    \"\"\"模型说明（会自动出现在文档里）\"\"\"\n    ...\n```\n\n### 第二步：按情况更新文档\n\n**情况一：在已有模块里新增了函数/类**\n→ 什么都不用做，autodoc 自动扫描 ✅\n\n**情况二：新增了一个 `.py` 文件**\n→ 在对应模块的 `.rst` 文件里追加：\n```rst\n.. autofunction:: histox.your_module.your_new_function\n\n.. autoclass:: histox.your_module.YourNewClass\n   :members:\n```\n\n**情况三：新增了一个全新子模块目录**（如 `histox/algo/`）\n→ 步骤一：新建 `docs/source/algo.rst`：\n```rst\nalgo\n====\n.. automodule:: histox.algo\n   :members:\n```\n→ 步骤二：在 `docs/source/index.rst` 的 toctree 里加上：\n```rst\n.. toctree::\n   algo\n```\n\n### 第三步：同步文档版本号\n只需改 `docs/source/conf.py` 里的一行：\n```python\nrelease = '0.2.0'   # ← 改成新版本号\n```\n\n### 第四步：提交代码并打 tag\n```bash\ngit add .\ngit commit -m \"feat: 新增 xxx 功能\"\n\n# 打版本 tag（这是版本号的唯一来源，setup.py 自动读取）\ngit tag v0.2.0\ngit push origin master\ngit push origin v0.2.0\n```\n\nPush 完成后，Read the Docs 自动触发构建，几分钟后文档更新 ✅\n\n---\n\n## 二、发布到 PyPI（可选）\n\n```bash\n# 安装构建工具（首次需要）\npip install build twine\n\n# 构建\npython -m build\n\n# 上传到 PyPI\ntwine upload dist/*\n```\n\n> 上传时需要 PyPI 账号的 API Token，首次配置：\n> ```bash\n> # 在 ~/.pypirc 里配置\n> [pypi]\n> username = __token__\n> password = pypi-xxxxxxxxxxxxxxxx\n> ```\n\n---\n\n## 三、版本号规则\n\n遵循语义化版本 `主版本.次版本.补丁`：\n\n| 改动类型 | 示例场景 | 版本变化 |\n|---------|---------|---------|\n| 修复 bug | 修复某个函数计算错误 | `0.1.4` → `0.1.5` |\n| 新增功能（向下兼容） | 新增一个算法/模块 | `0.1.4` → `0.2.0` |\n| 大规模重构/不兼容 | 修改了公开 API 接口 | `0.1.4` → `1.0.0` |\n\n---\n\n## 四、注意事项\n\n| 项目 | 说明 |\n|------|------|\n| `setup.py` 版本 | ❌ 不用改，`use_scm_version=True` 自动从 git tag 读取 |\n| `setup.cfg` 版本 | ❌ 不用改，文件里没有 version 字段 |\n| `conf.py` release | ✅ 手动改一行，仅用于文档页面显示 |\n| 版本号唯一来源 | ✅ `git tag vX.X.X` |\n| 新增 torch/tf 依赖 | ✅ 加到 `setup.py` 的 `extras_require['torch']` 或 `['tf']` 里 |\n| 新增通用依赖 | ✅ 加到 `setup.py` 的 `install_requires` 里 |\n\n---\n\n## 五、一张图总结\n\n```\n写代码\n  ↓\n更新文档（按情况）\n  ├─ 已有模块新增内容   →  无需操作 ✅\n  ├─ 新增 .py 文件      →  对应 .rst 加 autofunction/autoclass\n  └─ 新增子模块目录     →  新建 .rst + 更新 index.rst toctree\n  ↓\nconf.py 改 release = 'x.x.x'\n  ↓\ngit add . && git commit -m \"feat: xxx\"\ngit tag vx.x.x\ngit push origin master && git push origin vx.x.x\n  ↓\nRTD 自动构建文档 ✅\npython -m build && twine upload dist/*  （PyPI，可选）✅\n```",
+  "category": "tech",
+  "date": "2026-04-12T12:45:31.543Z",
+  "updated": "2026-04-12T12:45:31.543Z",
+  "emoji": "📄",
+  "cover": "",
+  "tags": [
+    "histox库"
+  ],
+  "nbCells": null
+}
